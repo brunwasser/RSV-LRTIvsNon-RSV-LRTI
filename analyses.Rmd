@@ -1,0 +1,42 @@
+---
+title: "Analyses"
+author: "Steve Brunwasser"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    number_sections: true
+    code_folding: hide
+    theme: cosmo
+    highlight: tango
+---
+
+# Prepare Workspace
+
+Load packages
+```{r}
+require( robumeta )
+require( Hmisc )
+```
+
+
+Read in *dfall.RData* data frame created in the "Data Prep" page.
+```{r}
+load( 'dfall.RData' )
+```
+
+Create a subset of the data frame containing only comparisons between RSV+ and RSV- LRTI. 
+```{r}
+dfsub <- subset( dfall, type == 2 )
+
+```
+
+
+```{r}
+describe( dfsub$es )
+
+write.csv( dfsub, file = 'dfsub.csv')
+```
+
