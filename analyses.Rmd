@@ -13,30 +13,66 @@ output:
     highlight: tango
 ---
 
+
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
 # Prepare Workspace
 
 Load packages
 ```{r}
 require( robumeta )
 require( Hmisc )
+require( ggplot2 )
 ```
 
 
-Read in *dfall.RData* data frame created in the "Data Prep" page.
+Load the data frame
 ```{r}
-load( 'dfall.RData' )
-```
-
-Create a subset of the data frame containing only comparisons between RSV+ and RSV- LRTI. 
-```{r}
-dfsub <- subset( dfall, type == 2 )
-
+load( 'dfsub.RData' )
 ```
 
 
-```{r}
-describe( dfsub$es )
+# Descriptives
 
-write.csv( dfsub, file = 'dfsub.csv')
+```{r}
+dfsub$w <- 1/dfsub$es.se
+qqplot <- ggplot( dfsub, aes( sample = log( es ) ) ) +
+  stat_qq( ) +
+  stat_qq_line( )
+qqplot
+```
+
+
+```{r}
+dfsub <- dfsub[ order( dfsub$record_id, dfsub$outid, dfsub$compid, dfsub$time ), ]
+```
+
+
+# Analyses
+
+Run an intercept-only model, providing just a marginal and unadjusted mean effect size.
+```{r}
+m1 <- robu( log( es ) ~ 1, 
+            studynum = record_id, 
+            var.eff.size = es.se^2,
+            data = dfsub,
+            modelweights = 'CORR',
+            small = T
+            )
+print( m1 )
+
+```
+
+
+Anti-log the estimate and confidence intervals to get odds ratios
+```{r}
+( model1.eff <- data.frame( OddsRatioEstimate=round( exp( m1$reg_table$b.r ), digits = 2 ), 
+                           LCI=round( exp( m1$reg_table$CI.L ), digits = 2 ),
+                           UCI=round( exp( m1$reg_table$CI.U ), digits = 2 ) 
+                           ) 
+  )
 ```
 

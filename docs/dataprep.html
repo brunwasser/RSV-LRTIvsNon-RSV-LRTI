@@ -455,327 +455,653 @@ div.tocify {
 <div id="workspace-preparation" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Workspace
 Preparation</h1>
+<p>Load necessary packages</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( Hmisc )</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( rms )</span></code></pre></div>
 <p>Read in data file</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>( <span class="st">&#39;WHORSVAsthmaReview_DATA_2022-07-27_0856.csv&#39;</span>, <span class="at">header =</span> T )</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>( <span class="st">&#39;WHORSVAsthmaReview_DATA_2022-07-27_0856.csv&#39;</span>, <span class="at">header =</span> T )</span></code></pre></div>
 <p>Create study-level data frame</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>study <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">35</span>, <span class="dv">740</span><span class="sc">:</span><span class="dv">747</span> ) ]</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>study <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">35</span>, <span class="dv">740</span><span class="sc">:</span><span class="dv">747</span> ) ]</span></code></pre></div>
 </div>
 <div id="outcome-1-preparation" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Outcome 1
 preparation</h1>
 <p>Create outcome 1 data frame</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>out1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">36</span><span class="sc">:</span><span class="dv">84</span> ) ]</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>out1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">36</span><span class="sc">:</span><span class="dv">84</span> ) ]</span></code></pre></div>
 <p>Create outcome 1, comparison 1 data frame</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>out1comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">85</span><span class="sc">:</span><span class="dv">137</span> ) ]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>out1comp1<span class="sc">$</span>out1comp1expmeth___6 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>out1comp1.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out1comp1,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1estype&#39;</span>,<span class="st">&#39;out1comp1time2estype&#39;</span>,<span class="st">&#39;out1comp1time3estype&#39;</span>),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1esdesc&#39;</span>,<span class="st">&#39;out1comp1time2esdesc&#39;</span>,<span class="st">&#39;out1comp1time3esdesc&#39;</span>),</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1esmethod&#39;</span>,<span class="st">&#39;out1comp1time2esmethod&#39;</span>,<span class="st">&#39;out1comp1time3esmethod&#39;</span>),</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp1time1&#39;</span>,<span class="st">&#39;es_out1comp1time2&#39;</span>,<span class="st">&#39;es_out1comp1time3&#39;</span>),</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o1c1t1&#39;</span>,<span class="st">&#39;es_se_report_o1c1t2&#39;</span>,<span class="st">&#39;es_se_report_o1c1t3&#39;</span>),</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o1c1t1&#39;</span>,<span class="st">&#39;es_se_o1c1t2&#39;</span>,<span class="st">&#39;es_se_o1c1t3&#39;</span>),</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp1time1n&#39;</span>,<span class="st">&#39;es_out1comp1time2n&#39;</span>,<span class="st">&#39;es_out1comp1time3n&#39;</span>),</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1expevent&#39;</span>,<span class="st">&#39;out1comp1time2expevent&#39;</span>,<span class="st">&#39;out1comp1time3expevent&#39;</span>),</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1expnon&#39;</span>,<span class="st">&#39;out1comp1time2expnon&#39;</span>,<span class="st">&#39;out1comp1time3expnon&#39;</span>),</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp1time1compevent&#39;</span>,<span class="st">&#39;out1comp1time2compevent&#39;</span>,<span class="st">&#39;out1comp1time3compevent&#39;</span>),</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp1time1compnon&#39;</span>,<span class="st">&#39;out1comp1time2compnon&#39;</span>,<span class="st">&#39;out1comp1time3compnon&#39;</span>),</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out1comp1time1age&#39;</span>,<span class="st">&#39;es_out1comp1time2age&#39;</span>,<span class="st">&#39;es_out1comp1time3age&#39;</span>) ),</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>                           )</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>out1comp1.long1 <span class="ot">&lt;-</span> out1comp1.long[ <span class="fu">order</span>( out1comp1.long<span class="sc">$</span>record_id, out1comp1.long<span class="sc">$</span>time ), ]</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>out1comp1.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">1</span>        </span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>out1comp1.long1<span class="sc">$</span>out1comp1expmeth___6 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>out1comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">85</span><span class="sc">:</span><span class="dv">137</span> ) ]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>out1comp1<span class="sc">$</span>out1comp1expmeth___6 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>out1comp1.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out1comp1,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1estype&#39;</span>,<span class="st">&#39;out1comp1time2estype&#39;</span>,<span class="st">&#39;out1comp1time3estype&#39;</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1esdesc&#39;</span>,<span class="st">&#39;out1comp1time2esdesc&#39;</span>,<span class="st">&#39;out1comp1time3esdesc&#39;</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1esmethod&#39;</span>,<span class="st">&#39;out1comp1time2esmethod&#39;</span>,<span class="st">&#39;out1comp1time3esmethod&#39;</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp1time1&#39;</span>,<span class="st">&#39;es_out1comp1time2&#39;</span>,<span class="st">&#39;es_out1comp1time3&#39;</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o1c1t1&#39;</span>,<span class="st">&#39;es_se_report_o1c1t2&#39;</span>,<span class="st">&#39;es_se_report_o1c1t3&#39;</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o1c1t1&#39;</span>,<span class="st">&#39;es_se_o1c1t2&#39;</span>,<span class="st">&#39;es_se_o1c1t3&#39;</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp1time1n&#39;</span>,<span class="st">&#39;es_out1comp1time2n&#39;</span>,<span class="st">&#39;es_out1comp1time3n&#39;</span>),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1expevent&#39;</span>,<span class="st">&#39;out1comp1time2expevent&#39;</span>,<span class="st">&#39;out1comp1time3expevent&#39;</span>),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp1time1expnon&#39;</span>,<span class="st">&#39;out1comp1time2expnon&#39;</span>,<span class="st">&#39;out1comp1time3expnon&#39;</span>),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp1time1compevent&#39;</span>,<span class="st">&#39;out1comp1time2compevent&#39;</span>,<span class="st">&#39;out1comp1time3compevent&#39;</span>),</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp1time1compnon&#39;</span>,<span class="st">&#39;out1comp1time2compnon&#39;</span>,<span class="st">&#39;out1comp1time3compnon&#39;</span>),</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out1comp1time1age&#39;</span>,<span class="st">&#39;es_out1comp1time2age&#39;</span>,<span class="st">&#39;es_out1comp1time3age&#39;</span>) ),</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>                           )</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>out1comp1.long1 <span class="ot">&lt;-</span> out1comp1.long[ <span class="fu">order</span>( out1comp1.long<span class="sc">$</span>record_id, out1comp1.long<span class="sc">$</span>time ), ]</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>out1comp1.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">1</span>        </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>out1comp1.long1<span class="sc">$</span>out1comp1expmeth___6 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>Create outcome 1, comparison 2 data frame</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>out1comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">139</span><span class="sc">:</span><span class="dv">190</span> ) ]</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>out1comp2.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out1comp2,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1estype&#39;</span>,<span class="st">&#39;out1comp2time2estype&#39;</span>,<span class="st">&#39;out1comp2time3estype&#39;</span>),</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1esdesc&#39;</span>,<span class="st">&#39;out1comp2time2esdesc&#39;</span>,<span class="st">&#39;out1comp2time3esdesc&#39;</span>),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1esmethod&#39;</span>,<span class="st">&#39;out1comp2time2esmethod&#39;</span>,<span class="st">&#39;out1comp2time3esmethod&#39;</span>),</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp2time1&#39;</span>,<span class="st">&#39;es_out1comp2time2&#39;</span>,<span class="st">&#39;es_out1comp2time3&#39;</span>),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o1c2t1&#39;</span>,<span class="st">&#39;es_se_report_o1c2t2&#39;</span>,<span class="st">&#39;es_se_report_o1c2t3&#39;</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o1c2t1&#39;</span>,<span class="st">&#39;es_se_o1c2t2&#39;</span>,<span class="st">&#39;es_se_o1c2t3&#39;</span>),</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp2time1n&#39;</span>,<span class="st">&#39;es_out1comp2time2n&#39;</span>,<span class="st">&#39;es_out1comp2time3n&#39;</span>),</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1expevent&#39;</span>,<span class="st">&#39;out1comp2time2expevent&#39;</span>,<span class="st">&#39;out1comp2time3expevent&#39;</span>),</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1expnon&#39;</span>,<span class="st">&#39;out1comp2time2expnon&#39;</span>,<span class="st">&#39;out1comp2time3expnon&#39;</span>),</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp2time1compevent&#39;</span>,<span class="st">&#39;out1comp2time2compevent&#39;</span>,<span class="st">&#39;out1comp2time3compevent&#39;</span>),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp2time1compnon&#39;</span>,<span class="st">&#39;out1comp2time2compnon&#39;</span>,<span class="st">&#39;out1comp2time3compnon&#39;</span>),</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out1comp2time1age&#39;</span>,<span class="st">&#39;es_out1comp2time2age&#39;</span>,<span class="st">&#39;es_out1comp2time3age&#39;</span>) ),</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>                           )</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>out1comp2.long1 <span class="ot">&lt;-</span> out1comp2.long[ <span class="fu">order</span>( out1comp2.long<span class="sc">$</span>record_id, out1comp2.long<span class="sc">$</span>time ), ]</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>out1comp2.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>out1comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">139</span><span class="sc">:</span><span class="dv">190</span> ) ]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>out1comp2.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out1comp2,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1estype&#39;</span>,<span class="st">&#39;out1comp2time2estype&#39;</span>,<span class="st">&#39;out1comp2time3estype&#39;</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1esdesc&#39;</span>,<span class="st">&#39;out1comp2time2esdesc&#39;</span>,<span class="st">&#39;out1comp2time3esdesc&#39;</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1esmethod&#39;</span>,<span class="st">&#39;out1comp2time2esmethod&#39;</span>,<span class="st">&#39;out1comp2time3esmethod&#39;</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp2time1&#39;</span>,<span class="st">&#39;es_out1comp2time2&#39;</span>,<span class="st">&#39;es_out1comp2time3&#39;</span>),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o1c2t1&#39;</span>,<span class="st">&#39;es_se_report_o1c2t2&#39;</span>,<span class="st">&#39;es_se_report_o1c2t3&#39;</span>),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o1c2t1&#39;</span>,<span class="st">&#39;es_se_o1c2t2&#39;</span>,<span class="st">&#39;es_se_o1c2t3&#39;</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp2time1n&#39;</span>,<span class="st">&#39;es_out1comp2time2n&#39;</span>,<span class="st">&#39;es_out1comp2time3n&#39;</span>),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1expevent&#39;</span>,<span class="st">&#39;out1comp2time2expevent&#39;</span>,<span class="st">&#39;out1comp2time3expevent&#39;</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1expnon&#39;</span>,<span class="st">&#39;out1comp2time2expnon&#39;</span>,<span class="st">&#39;out1comp2time3expnon&#39;</span>),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp2time1compevent&#39;</span>,<span class="st">&#39;out1comp2time2compevent&#39;</span>,<span class="st">&#39;out1comp2time3compevent&#39;</span>),</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp2time1compnon&#39;</span>,<span class="st">&#39;out1comp2time2compnon&#39;</span>,<span class="st">&#39;out1comp2time3compnon&#39;</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out1comp2time1age&#39;</span>,<span class="st">&#39;es_out1comp2time2age&#39;</span>,<span class="st">&#39;es_out1comp2time3age&#39;</span>) ),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>                           )</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>out1comp2.long1 <span class="ot">&lt;-</span> out1comp2.long[ <span class="fu">order</span>( out1comp2.long<span class="sc">$</span>record_id, out1comp2.long<span class="sc">$</span>time ), ]</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>out1comp2.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
 <p>Create outcome 1, comparison 3 data frame</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>out1comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">192</span><span class="sc">:</span><span class="dv">243</span> ) ]</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>out1comp3.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out1comp3,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1estype&#39;</span>,<span class="st">&#39;out1comp3time2estype&#39;</span>,<span class="st">&#39;out1comp3time3estype&#39;</span>),</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1esdesc&#39;</span>,<span class="st">&#39;out1comp3time2esdesc&#39;</span>,<span class="st">&#39;out1comp3time3esdesc&#39;</span>),</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1esmethod&#39;</span>,<span class="st">&#39;out1comp3time2esmethod&#39;</span>,<span class="st">&#39;out1comp3time3esmethod&#39;</span>),</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp3time1&#39;</span>,<span class="st">&#39;es_out1comp3time2&#39;</span>,<span class="st">&#39;es_out1comp3time3&#39;</span>),</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o1c3t1&#39;</span>,<span class="st">&#39;es_se_report_o1c3t2&#39;</span>,<span class="st">&#39;es_se_report_o1c3t3&#39;</span>),</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o1c3t1&#39;</span>,<span class="st">&#39;es_se_o1c3t2&#39;</span>,<span class="st">&#39;es_se_o1c3t3&#39;</span>),</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp3time1n&#39;</span>,<span class="st">&#39;es_out1comp3time2n&#39;</span>,<span class="st">&#39;es_out1comp3time3n&#39;</span>),</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1expevent&#39;</span>,<span class="st">&#39;out1comp3time2expevent&#39;</span>,<span class="st">&#39;out1comp3time3expevent&#39;</span>),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1expnon&#39;</span>,<span class="st">&#39;out1comp3time2expnon&#39;</span>,<span class="st">&#39;out1comp3time3expnon&#39;</span>),</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp3time1compevent&#39;</span>,<span class="st">&#39;out1comp3time2compevent&#39;</span>,<span class="st">&#39;out1comp3time3compevent&#39;</span>),</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp3time1compnon&#39;</span>,<span class="st">&#39;out1comp3time2compnon&#39;</span>,<span class="st">&#39;out1comp3time3compnon&#39;</span>),</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out1comp3time1age&#39;</span>,<span class="st">&#39;es_out1comp3time2age&#39;</span>,<span class="st">&#39;es_out1comp3time3age&#39;</span>) ),</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>out1comp3.long1 <span class="ot">&lt;-</span> out1comp3.long[ <span class="fu">order</span>( out1comp3.long<span class="sc">$</span>record_id, out1comp3.long<span class="sc">$</span>time ), ]</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>out1comp3.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>out1comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">192</span><span class="sc">:</span><span class="dv">243</span> ) ]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>out1comp3.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out1comp3,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1estype&#39;</span>,<span class="st">&#39;out1comp3time2estype&#39;</span>,<span class="st">&#39;out1comp3time3estype&#39;</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1esdesc&#39;</span>,<span class="st">&#39;out1comp3time2esdesc&#39;</span>,<span class="st">&#39;out1comp3time3esdesc&#39;</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1esmethod&#39;</span>,<span class="st">&#39;out1comp3time2esmethod&#39;</span>,<span class="st">&#39;out1comp3time3esmethod&#39;</span>),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp3time1&#39;</span>,<span class="st">&#39;es_out1comp3time2&#39;</span>,<span class="st">&#39;es_out1comp3time3&#39;</span>),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o1c3t1&#39;</span>,<span class="st">&#39;es_se_report_o1c3t2&#39;</span>,<span class="st">&#39;es_se_report_o1c3t3&#39;</span>),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o1c3t1&#39;</span>,<span class="st">&#39;es_se_o1c3t2&#39;</span>,<span class="st">&#39;es_se_o1c3t3&#39;</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out1comp3time1n&#39;</span>,<span class="st">&#39;es_out1comp3time2n&#39;</span>,<span class="st">&#39;es_out1comp3time3n&#39;</span>),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1expevent&#39;</span>,<span class="st">&#39;out1comp3time2expevent&#39;</span>,<span class="st">&#39;out1comp3time3expevent&#39;</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp3time1expnon&#39;</span>,<span class="st">&#39;out1comp3time2expnon&#39;</span>,<span class="st">&#39;out1comp3time3expnon&#39;</span>),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp3time1compevent&#39;</span>,<span class="st">&#39;out1comp3time2compevent&#39;</span>,<span class="st">&#39;out1comp3time3compevent&#39;</span>),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out1comp3time1compnon&#39;</span>,<span class="st">&#39;out1comp3time2compnon&#39;</span>,<span class="st">&#39;out1comp3time3compnon&#39;</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out1comp3time1age&#39;</span>,<span class="st">&#39;es_out1comp3time2age&#39;</span>,<span class="st">&#39;es_out1comp3time3age&#39;</span>) ),</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>out1comp3.long1 <span class="ot">&lt;-</span> out1comp3.long[ <span class="fu">order</span>( out1comp3.long<span class="sc">$</span>record_id, out1comp3.long<span class="sc">$</span>time ), ]</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>out1comp3.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
 <p>Merge all outcome 1 data frames together</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out1comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out1comp2.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out1comp3.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>out1varying <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out1comp1.long1, out1comp2.long1, out1comp3.long1 )</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>out1all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out1, out1varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out1comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out1comp2.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out1comp3.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>out1varying <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out1comp1.long1, out1comp2.long1, out1comp3.long1 )</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>out1all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out1, out1varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>out1all<span class="sc">$</span>outid <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div>
 </div>
 <div id="outcome-2-preparation" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Outcome 2
 preparation</h1>
 <p>Create outcome 2 data frame</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>out2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">245</span><span class="sc">:</span><span class="dv">253</span>, <span class="dv">255</span><span class="sc">:</span><span class="dv">294</span> ) ]</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>out2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">245</span><span class="sc">:</span><span class="dv">253</span>, <span class="dv">255</span><span class="sc">:</span><span class="dv">294</span> ) ]</span></code></pre></div>
 <p>Create outcome 2, comparison 1 data frame</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>out2comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">334</span><span class="sc">:</span><span class="dv">385</span> ) ]</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>out2comp1.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out2comp1,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1estype&#39;</span>,<span class="st">&#39;out2comp1time2estype&#39;</span>,<span class="st">&#39;out2comp1time3estype&#39;</span>),</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1esdesc&#39;</span>,<span class="st">&#39;out2comp1time2esdesc&#39;</span>,<span class="st">&#39;out2comp1time3esdesc&#39;</span>),</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1esmethod&#39;</span>,<span class="st">&#39;out2comp1time2esmethod&#39;</span>,<span class="st">&#39;out2comp1time3esmethod&#39;</span>),</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp1time1&#39;</span>,<span class="st">&#39;es_out2comp1time2&#39;</span>,<span class="st">&#39;es_out2comp1time3&#39;</span>),</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o2c1t1&#39;</span>,<span class="st">&#39;es_se_report_o2c1t2&#39;</span>,<span class="st">&#39;es_se_report_o2c1t3&#39;</span>),</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o2c1t1&#39;</span>,<span class="st">&#39;es_se_o2c1t2&#39;</span>,<span class="st">&#39;es_se_o2c1t3&#39;</span>),</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp1time1n&#39;</span>,<span class="st">&#39;es_out2comp1time2n&#39;</span>,<span class="st">&#39;es_out2comp1time3n&#39;</span>),</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1expevent&#39;</span>,<span class="st">&#39;out2comp1time2expevent&#39;</span>,<span class="st">&#39;out2comp1time3expevent&#39;</span>),</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1expnon&#39;</span>,<span class="st">&#39;out2comp1time2expnon&#39;</span>,<span class="st">&#39;out2comp1time3expnon&#39;</span>),</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp1time1compevent&#39;</span>,<span class="st">&#39;out2comp1time2compevent&#39;</span>,<span class="st">&#39;out2comp1time3compevent&#39;</span>),</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp1time1compnon&#39;</span>,<span class="st">&#39;out2comp1time2compnon&#39;</span>,<span class="st">&#39;out2comp1time3compnon&#39;</span>),</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out2comp1time1age&#39;</span>,<span class="st">&#39;es_out2comp1time2age&#39;</span>,<span class="st">&#39;es_out2comp1time3age&#39;</span>) ),</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>out2comp1.long1 <span class="ot">&lt;-</span> out2comp1.long[ <span class="fu">order</span>( out2comp1.long<span class="sc">$</span>record_id, out2comp1.long<span class="sc">$</span>time ), ]</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>out2comp1.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">1</span>        </span></code></pre></div>
-<p>Create outcome 1, comparison 2 data frame</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>out2comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">387</span><span class="sc">:</span><span class="dv">438</span> ) ]</span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>out2comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">334</span><span class="sc">:</span><span class="dv">385</span> ) ]</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>out2comp2.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out2comp2,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1estype&#39;</span>,<span class="st">&#39;out2comp2time2estype&#39;</span>,<span class="st">&#39;out2comp2time3estype&#39;</span>),</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1esdesc&#39;</span>,<span class="st">&#39;out2comp2time2esdesc&#39;</span>,<span class="st">&#39;out2comp2time3esdesc&#39;</span>),</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1esmethod&#39;</span>,<span class="st">&#39;out2comp2time2esmethod&#39;</span>,<span class="st">&#39;out2comp2time3esmethod&#39;</span>),</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp2time1&#39;</span>,<span class="st">&#39;es_out2comp2time2&#39;</span>,<span class="st">&#39;es_out2comp2time3&#39;</span>),</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o2c2t1&#39;</span>,<span class="st">&#39;es_se_report_o2c2t2&#39;</span>,<span class="st">&#39;es_se_report_o2c2t3&#39;</span>),</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o2c2t1&#39;</span>,<span class="st">&#39;es_se_o2c2t2&#39;</span>,<span class="st">&#39;es_se_o2c2t3&#39;</span>),</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp2time1n&#39;</span>,<span class="st">&#39;es_out2comp2time2n&#39;</span>,<span class="st">&#39;es_out2comp2time3n&#39;</span>),</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1expevent&#39;</span>,<span class="st">&#39;out2comp2time2expevent&#39;</span>,<span class="st">&#39;out2comp2time3expevent&#39;</span>),</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1expnon&#39;</span>,<span class="st">&#39;out2comp2time2expnon&#39;</span>,<span class="st">&#39;out2comp2time3expnon&#39;</span>),</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp2time1compevent&#39;</span>,<span class="st">&#39;out2comp2time2compevent&#39;</span>,<span class="st">&#39;out2comp2time3compevent&#39;</span>),</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp2time1compnon&#39;</span>,<span class="st">&#39;out2comp2time2compnon&#39;</span>,<span class="st">&#39;out2comp2time3compnon&#39;</span>),</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out2comp2time1age&#39;</span>,<span class="st">&#39;es_out2comp2time2age&#39;</span>,<span class="st">&#39;es_out2comp2time3age&#39;</span>) ),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>out2comp1.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out2comp1,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1estype&#39;</span>,<span class="st">&#39;out2comp1time2estype&#39;</span>,<span class="st">&#39;out2comp1time3estype&#39;</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1esdesc&#39;</span>,<span class="st">&#39;out2comp1time2esdesc&#39;</span>,<span class="st">&#39;out2comp1time3esdesc&#39;</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1esmethod&#39;</span>,<span class="st">&#39;out2comp1time2esmethod&#39;</span>,<span class="st">&#39;out2comp1time3esmethod&#39;</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp1time1&#39;</span>,<span class="st">&#39;es_out2comp1time2&#39;</span>,<span class="st">&#39;es_out2comp1time3&#39;</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o2c1t1&#39;</span>,<span class="st">&#39;es_se_report_o2c1t2&#39;</span>,<span class="st">&#39;es_se_report_o2c1t3&#39;</span>),</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o2c1t1&#39;</span>,<span class="st">&#39;es_se_o2c1t2&#39;</span>,<span class="st">&#39;es_se_o2c1t3&#39;</span>),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp1time1n&#39;</span>,<span class="st">&#39;es_out2comp1time2n&#39;</span>,<span class="st">&#39;es_out2comp1time3n&#39;</span>),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1expevent&#39;</span>,<span class="st">&#39;out2comp1time2expevent&#39;</span>,<span class="st">&#39;out2comp1time3expevent&#39;</span>),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp1time1expnon&#39;</span>,<span class="st">&#39;out2comp1time2expnon&#39;</span>,<span class="st">&#39;out2comp1time3expnon&#39;</span>),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp1time1compevent&#39;</span>,<span class="st">&#39;out2comp1time2compevent&#39;</span>,<span class="st">&#39;out2comp1time3compevent&#39;</span>),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp1time1compnon&#39;</span>,<span class="st">&#39;out2comp1time2compnon&#39;</span>,<span class="st">&#39;out2comp1time3compnon&#39;</span>),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out2comp1time1age&#39;</span>,<span class="st">&#39;es_out2comp1time2age&#39;</span>,<span class="st">&#39;es_out2comp1time3age&#39;</span>) ),</span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
 <span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>out2comp2.long1 <span class="ot">&lt;-</span> out2comp2.long[ <span class="fu">order</span>( out2comp2.long<span class="sc">$</span>record_id, out2comp2.long<span class="sc">$</span>time ), ]</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>out2comp2.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
-<p>Create outcome 1, comparison 3 data frame</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>out2comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">440</span><span class="sc">:</span><span class="dv">491</span> ) ]</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>out2comp1.long1 <span class="ot">&lt;-</span> out2comp1.long[ <span class="fu">order</span>( out2comp1.long<span class="sc">$</span>record_id, out2comp1.long<span class="sc">$</span>time ), ]</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>out2comp1.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">1</span>        </span></code></pre></div>
+<p>Create outcome 1, comparison 2 data frame</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>out2comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">387</span><span class="sc">:</span><span class="dv">438</span> ) ]</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>out2comp3.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out2comp3,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1estype&#39;</span>,<span class="st">&#39;out2comp3time2estype&#39;</span>,<span class="st">&#39;out2comp3time3estype&#39;</span>),</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1esdesc&#39;</span>,<span class="st">&#39;out2comp3time2esdesc&#39;</span>,<span class="st">&#39;out2comp3time3esdesc&#39;</span>),</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1esmethod&#39;</span>,<span class="st">&#39;out2comp3time2esmethod&#39;</span>,<span class="st">&#39;out2comp3time3esmethod&#39;</span>),</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp3time1&#39;</span>,<span class="st">&#39;es_out2comp3time2&#39;</span>,<span class="st">&#39;es_out2comp3time3&#39;</span>),</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o2c3t1&#39;</span>,<span class="st">&#39;es_se_report_o2c3t2&#39;</span>,<span class="st">&#39;es_se_report_o2c3t3&#39;</span>),</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o2c3t1&#39;</span>,<span class="st">&#39;es_se_o2c3t2&#39;</span>,<span class="st">&#39;es_se_o2c3t3&#39;</span>),</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp3time1n&#39;</span>,<span class="st">&#39;es_out2comp3time2n&#39;</span>,<span class="st">&#39;es_out2comp3time3n&#39;</span>),</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1expevent&#39;</span>,<span class="st">&#39;out2comp3time2expevent&#39;</span>,<span class="st">&#39;out2comp3time3expevent&#39;</span>),</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1expnon&#39;</span>,<span class="st">&#39;out2comp3time2expnon&#39;</span>,<span class="st">&#39;out2comp3time3expnon&#39;</span>),</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp3time1compevent&#39;</span>,<span class="st">&#39;out2comp3time2compevent&#39;</span>,<span class="st">&#39;out2comp3time3compevent&#39;</span>),</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp3time1compnon&#39;</span>,<span class="st">&#39;out2comp3time2compnon&#39;</span>,<span class="st">&#39;out2comp3time3compnon&#39;</span>),</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out2comp3time1age&#39;</span>,<span class="st">&#39;es_out2comp3time2age&#39;</span>,<span class="st">&#39;es_out2comp3time3age&#39;</span>) ),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>out2comp2.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out2comp2,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1estype&#39;</span>,<span class="st">&#39;out2comp2time2estype&#39;</span>,<span class="st">&#39;out2comp2time3estype&#39;</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1esdesc&#39;</span>,<span class="st">&#39;out2comp2time2esdesc&#39;</span>,<span class="st">&#39;out2comp2time3esdesc&#39;</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1esmethod&#39;</span>,<span class="st">&#39;out2comp2time2esmethod&#39;</span>,<span class="st">&#39;out2comp2time3esmethod&#39;</span>),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp2time1&#39;</span>,<span class="st">&#39;es_out2comp2time2&#39;</span>,<span class="st">&#39;es_out2comp2time3&#39;</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o2c2t1&#39;</span>,<span class="st">&#39;es_se_report_o2c2t2&#39;</span>,<span class="st">&#39;es_se_report_o2c2t3&#39;</span>),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o2c2t1&#39;</span>,<span class="st">&#39;es_se_o2c2t2&#39;</span>,<span class="st">&#39;es_se_o2c2t3&#39;</span>),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp2time1n&#39;</span>,<span class="st">&#39;es_out2comp2time2n&#39;</span>,<span class="st">&#39;es_out2comp2time3n&#39;</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1expevent&#39;</span>,<span class="st">&#39;out2comp2time2expevent&#39;</span>,<span class="st">&#39;out2comp2time3expevent&#39;</span>),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp2time1expnon&#39;</span>,<span class="st">&#39;out2comp2time2expnon&#39;</span>,<span class="st">&#39;out2comp2time3expnon&#39;</span>),</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp2time1compevent&#39;</span>,<span class="st">&#39;out2comp2time2compevent&#39;</span>,<span class="st">&#39;out2comp2time3compevent&#39;</span>),</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp2time1compnon&#39;</span>,<span class="st">&#39;out2comp2time2compnon&#39;</span>,<span class="st">&#39;out2comp2time3compnon&#39;</span>),</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out2comp2time1age&#39;</span>,<span class="st">&#39;es_out2comp2time2age&#39;</span>,<span class="st">&#39;es_out2comp2time3age&#39;</span>) ),</span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
 <span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
 <span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>out2comp3.long1 <span class="ot">&lt;-</span> out2comp3.long[ <span class="fu">order</span>( out2comp3.long<span class="sc">$</span>record_id, out2comp3.long<span class="sc">$</span>time ), ]</span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>out2comp3.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>out2comp2.long1 <span class="ot">&lt;-</span> out2comp2.long[ <span class="fu">order</span>( out2comp2.long<span class="sc">$</span>record_id, out2comp2.long<span class="sc">$</span>time ), ]</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>out2comp2.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
+<p>Create outcome 1, comparison 3 data frame</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>out2comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">440</span><span class="sc">:</span><span class="dv">491</span> ) ]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>out2comp3.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out2comp3,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1estype&#39;</span>,<span class="st">&#39;out2comp3time2estype&#39;</span>,<span class="st">&#39;out2comp3time3estype&#39;</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1esdesc&#39;</span>,<span class="st">&#39;out2comp3time2esdesc&#39;</span>,<span class="st">&#39;out2comp3time3esdesc&#39;</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1esmethod&#39;</span>,<span class="st">&#39;out2comp3time2esmethod&#39;</span>,<span class="st">&#39;out2comp3time3esmethod&#39;</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp3time1&#39;</span>,<span class="st">&#39;es_out2comp3time2&#39;</span>,<span class="st">&#39;es_out2comp3time3&#39;</span>),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o2c3t1&#39;</span>,<span class="st">&#39;es_se_report_o2c3t2&#39;</span>,<span class="st">&#39;es_se_report_o2c3t3&#39;</span>),</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o2c3t1&#39;</span>,<span class="st">&#39;es_se_o2c3t2&#39;</span>,<span class="st">&#39;es_se_o2c3t3&#39;</span>),</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out2comp3time1n&#39;</span>,<span class="st">&#39;es_out2comp3time2n&#39;</span>,<span class="st">&#39;es_out2comp3time3n&#39;</span>),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1expevent&#39;</span>,<span class="st">&#39;out2comp3time2expevent&#39;</span>,<span class="st">&#39;out2comp3time3expevent&#39;</span>),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out2comp3time1expnon&#39;</span>,<span class="st">&#39;out2comp3time2expnon&#39;</span>,<span class="st">&#39;out2comp3time3expnon&#39;</span>),</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp3time1compevent&#39;</span>,<span class="st">&#39;out2comp3time2compevent&#39;</span>,<span class="st">&#39;out2comp3time3compevent&#39;</span>),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out2comp3time1compnon&#39;</span>,<span class="st">&#39;out2comp3time2compnon&#39;</span>,<span class="st">&#39;out2comp3time3compnon&#39;</span>),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out2comp3time1age&#39;</span>,<span class="st">&#39;es_out2comp3time2age&#39;</span>,<span class="st">&#39;es_out2comp3time3age&#39;</span>) ),</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>out2comp3.long1 <span class="ot">&lt;-</span> out2comp3.long[ <span class="fu">order</span>( out2comp3.long<span class="sc">$</span>record_id, out2comp3.long<span class="sc">$</span>time ), ]</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>out2comp3.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
 <p>Merge all outcome 1 data frames together</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out2comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out2comp2.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out2comp3.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>out2varying <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out2comp1.long1, out2comp2.long1, out2comp3.long1 )</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>out2all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out2, out2varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out2comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out2comp2.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out2comp3.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>out2varying <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out2comp1.long1, out2comp2.long1, out2comp3.long1 )</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>out2all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out2, out2varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>out2all<span class="sc">$</span>outid <span class="ot">&lt;-</span> <span class="dv">2</span></span></code></pre></div>
 </div>
 <div id="outcome-3-preparation" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Outcome 3
 preparation</h1>
 <p>Create outcome 3 data frame</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>out3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">493</span><span class="sc">:</span><span class="dv">501</span>, <span class="dv">503</span><span class="sc">:</span><span class="dv">542</span> ) ]</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>out3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">493</span><span class="sc">:</span><span class="dv">501</span>, <span class="dv">503</span><span class="sc">:</span><span class="dv">542</span> ) ]</span></code></pre></div>
 <p>Create outcome 3, comparison 1 data frame</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>out3comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">582</span><span class="sc">:</span><span class="dv">633</span> ) ]</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>out3comp1.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out3comp1,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1estype&#39;</span>,<span class="st">&#39;out3comp1time2estype&#39;</span>,<span class="st">&#39;out3comp1time3estype&#39;</span>),</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1esdesc&#39;</span>,<span class="st">&#39;out3comp1time2esdesc&#39;</span>,<span class="st">&#39;out3comp1time3esdesc&#39;</span>),</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1esmethod&#39;</span>,<span class="st">&#39;out3comp1time2esmethod&#39;</span>,<span class="st">&#39;out3comp1time3esmethod&#39;</span>),</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp1time1&#39;</span>,<span class="st">&#39;es_out3comp1time2&#39;</span>,<span class="st">&#39;es_out3comp1time3&#39;</span>),</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o3c1t1&#39;</span>,<span class="st">&#39;es_se_report_o3c1t2&#39;</span>,<span class="st">&#39;es_se_report_o3c1t3&#39;</span>),</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o3c1t1&#39;</span>,<span class="st">&#39;es_se_o3c1t2&#39;</span>,<span class="st">&#39;es_se_o3c1t3&#39;</span>),</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp1time1n&#39;</span>,<span class="st">&#39;es_out3comp1time2n&#39;</span>,<span class="st">&#39;es_out3comp1time3n&#39;</span>),</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1expevent&#39;</span>,<span class="st">&#39;out3comp1time2expevent&#39;</span>,<span class="st">&#39;out3comp1time3expevent&#39;</span>),</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1expnon&#39;</span>,<span class="st">&#39;out3comp1time2expnon&#39;</span>,<span class="st">&#39;out3comp1time3expnon&#39;</span>),</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp1time1compevent&#39;</span>,<span class="st">&#39;out3comp1time2compevent&#39;</span>,<span class="st">&#39;out3comp1time3compevent&#39;</span>),</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp1time1compnon&#39;</span>,<span class="st">&#39;out3comp1time2compnon&#39;</span>,<span class="st">&#39;out3comp1time3compnon&#39;</span>),</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out3comp1time1age&#39;</span>,<span class="st">&#39;es_out3comp1time2age&#39;</span>,<span class="st">&#39;es_out3comp1time3age&#39;</span>) ),</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>out3comp1.long1 <span class="ot">&lt;-</span> out3comp1.long[ <span class="fu">order</span>( out3comp1.long<span class="sc">$</span>record_id, out3comp1.long<span class="sc">$</span>time ), ]</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>out3comp1.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">1</span>        </span></code></pre></div>
-<p>Create outcome 3, comparison 2 data frame</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>out3comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">635</span><span class="sc">:</span><span class="dv">686</span> ) ]</span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>out3comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">582</span><span class="sc">:</span><span class="dv">633</span> ) ]</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>out3comp2.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out3comp2,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1estype&#39;</span>,<span class="st">&#39;out3comp2time2estype&#39;</span>,<span class="st">&#39;out3comp2time3estype&#39;</span>),</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1esdesc&#39;</span>,<span class="st">&#39;out3comp2time2esdesc&#39;</span>,<span class="st">&#39;out3comp2time3esdesc&#39;</span>),</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1esmethod&#39;</span>,<span class="st">&#39;out3comp2time2esmethod&#39;</span>,<span class="st">&#39;out3comp2time3esmethod&#39;</span>),</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp2time1&#39;</span>,<span class="st">&#39;es_out3comp2time2&#39;</span>,<span class="st">&#39;es_out3comp2time3&#39;</span>),</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o3c2t1&#39;</span>,<span class="st">&#39;es_se_report_o3c2t2&#39;</span>,<span class="st">&#39;es_se_report_o3c2t3&#39;</span>),</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o3c2t1&#39;</span>,<span class="st">&#39;es_se_o3c2t2&#39;</span>,<span class="st">&#39;es_se_o3c2t3&#39;</span>),</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp2time1n&#39;</span>,<span class="st">&#39;es_out3comp2time2n&#39;</span>,<span class="st">&#39;es_out3comp2time3n&#39;</span>),</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1expevent&#39;</span>,<span class="st">&#39;out3comp2time2expevent&#39;</span>,<span class="st">&#39;out3comp2time3expevent&#39;</span>),</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1expnon&#39;</span>,<span class="st">&#39;out3comp2time2expnon&#39;</span>,<span class="st">&#39;out3comp2time3expnon&#39;</span>),</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp2time1compevent&#39;</span>,<span class="st">&#39;out3comp2time2compevent&#39;</span>,<span class="st">&#39;out3comp2time3compevent&#39;</span>),</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp2time1compnon&#39;</span>,<span class="st">&#39;out3comp2time2compnon&#39;</span>,<span class="st">&#39;out3comp2time3compnon&#39;</span>),</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out3comp2time1age&#39;</span>,<span class="st">&#39;es_out3comp2time2age&#39;</span>,<span class="st">&#39;es_out3comp2time3age&#39;</span>) ),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>out3comp1.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out3comp1,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1estype&#39;</span>,<span class="st">&#39;out3comp1time2estype&#39;</span>,<span class="st">&#39;out3comp1time3estype&#39;</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1esdesc&#39;</span>,<span class="st">&#39;out3comp1time2esdesc&#39;</span>,<span class="st">&#39;out3comp1time3esdesc&#39;</span>),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1esmethod&#39;</span>,<span class="st">&#39;out3comp1time2esmethod&#39;</span>,<span class="st">&#39;out3comp1time3esmethod&#39;</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp1time1&#39;</span>,<span class="st">&#39;es_out3comp1time2&#39;</span>,<span class="st">&#39;es_out3comp1time3&#39;</span>),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o3c1t1&#39;</span>,<span class="st">&#39;es_se_report_o3c1t2&#39;</span>,<span class="st">&#39;es_se_report_o3c1t3&#39;</span>),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o3c1t1&#39;</span>,<span class="st">&#39;es_se_o3c1t2&#39;</span>,<span class="st">&#39;es_se_o3c1t3&#39;</span>),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp1time1n&#39;</span>,<span class="st">&#39;es_out3comp1time2n&#39;</span>,<span class="st">&#39;es_out3comp1time3n&#39;</span>),</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1expevent&#39;</span>,<span class="st">&#39;out3comp1time2expevent&#39;</span>,<span class="st">&#39;out3comp1time3expevent&#39;</span>),</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp1time1expnon&#39;</span>,<span class="st">&#39;out3comp1time2expnon&#39;</span>,<span class="st">&#39;out3comp1time3expnon&#39;</span>),</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp1time1compevent&#39;</span>,<span class="st">&#39;out3comp1time2compevent&#39;</span>,<span class="st">&#39;out3comp1time3compevent&#39;</span>),</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp1time1compnon&#39;</span>,<span class="st">&#39;out3comp1time2compnon&#39;</span>,<span class="st">&#39;out3comp1time3compnon&#39;</span>),</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out3comp1time1age&#39;</span>,<span class="st">&#39;es_out3comp1time2age&#39;</span>,<span class="st">&#39;es_out3comp1time3age&#39;</span>) ),</span>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
 <span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
 <span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
 <span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
 <span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
 <span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>out3comp2.long1 <span class="ot">&lt;-</span> out3comp2.long[ <span class="fu">order</span>( out3comp2.long<span class="sc">$</span>record_id, out3comp2.long<span class="sc">$</span>time ), ]</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>out3comp2.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
-<p>Create outcome 1, comparison 3 data frame</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>out3comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">688</span><span class="sc">:</span><span class="dv">739</span> ) ]</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>out3comp1.long1 <span class="ot">&lt;-</span> out3comp1.long[ <span class="fu">order</span>( out3comp1.long<span class="sc">$</span>record_id, out3comp1.long<span class="sc">$</span>time ), ]</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>out3comp1.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">1</span>        </span></code></pre></div>
+<p>Create outcome 3, comparison 2 data frame</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>out3comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">635</span><span class="sc">:</span><span class="dv">686</span> ) ]</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>out3comp3.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out3comp3,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1estype&#39;</span>,<span class="st">&#39;out3comp3time2estype&#39;</span>,<span class="st">&#39;out3comp3time3estype&#39;</span>),</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1esdesc&#39;</span>,<span class="st">&#39;out3comp3time2esdesc&#39;</span>,<span class="st">&#39;out3comp3time3esdesc&#39;</span>),</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1esmethod&#39;</span>,<span class="st">&#39;out3comp3time2esmethod&#39;</span>,<span class="st">&#39;out3comp3time3esmethod&#39;</span>),</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp3time1&#39;</span>,<span class="st">&#39;es_out3comp3time2&#39;</span>,<span class="st">&#39;es_out3comp3time3&#39;</span>),</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o3c3t1&#39;</span>,<span class="st">&#39;es_se_report_o3c3t2&#39;</span>,<span class="st">&#39;es_se_report_o3c3t3&#39;</span>),</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o3c3t1&#39;</span>,<span class="st">&#39;es_se_o3c3t2&#39;</span>,<span class="st">&#39;es_se_o3c3t3&#39;</span>),</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp3time1n&#39;</span>,<span class="st">&#39;es_out3comp3time2n&#39;</span>,<span class="st">&#39;es_out3comp3time3n&#39;</span>),</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1expevent&#39;</span>,<span class="st">&#39;out3comp3time2expevent&#39;</span>,<span class="st">&#39;out3comp3time3expevent&#39;</span>),</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1expnon&#39;</span>,<span class="st">&#39;out3comp3time2expnon&#39;</span>,<span class="st">&#39;out3comp3time3expnon&#39;</span>),</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp3time1compevent&#39;</span>,<span class="st">&#39;out3comp3time2compevent&#39;</span>,<span class="st">&#39;out3comp3time3compevent&#39;</span>),</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp3time1compnon&#39;</span>,<span class="st">&#39;out3comp3time2compnon&#39;</span>,<span class="st">&#39;out3comp3time3compnon&#39;</span>),</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out3comp3time1age&#39;</span>,<span class="st">&#39;es_out3comp3time2age&#39;</span>,<span class="st">&#39;es_out3comp3time3age&#39;</span>) ),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>out3comp2.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out3comp2,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1estype&#39;</span>,<span class="st">&#39;out3comp2time2estype&#39;</span>,<span class="st">&#39;out3comp2time3estype&#39;</span>),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1esdesc&#39;</span>,<span class="st">&#39;out3comp2time2esdesc&#39;</span>,<span class="st">&#39;out3comp2time3esdesc&#39;</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1esmethod&#39;</span>,<span class="st">&#39;out3comp2time2esmethod&#39;</span>,<span class="st">&#39;out3comp2time3esmethod&#39;</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp2time1&#39;</span>,<span class="st">&#39;es_out3comp2time2&#39;</span>,<span class="st">&#39;es_out3comp2time3&#39;</span>),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o3c2t1&#39;</span>,<span class="st">&#39;es_se_report_o3c2t2&#39;</span>,<span class="st">&#39;es_se_report_o3c2t3&#39;</span>),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o3c2t1&#39;</span>,<span class="st">&#39;es_se_o3c2t2&#39;</span>,<span class="st">&#39;es_se_o3c2t3&#39;</span>),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp2time1n&#39;</span>,<span class="st">&#39;es_out3comp2time2n&#39;</span>,<span class="st">&#39;es_out3comp2time3n&#39;</span>),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1expevent&#39;</span>,<span class="st">&#39;out3comp2time2expevent&#39;</span>,<span class="st">&#39;out3comp2time3expevent&#39;</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp2time1expnon&#39;</span>,<span class="st">&#39;out3comp2time2expnon&#39;</span>,<span class="st">&#39;out3comp2time3expnon&#39;</span>),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp2time1compevent&#39;</span>,<span class="st">&#39;out3comp2time2compevent&#39;</span>,<span class="st">&#39;out3comp2time3compevent&#39;</span>),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp2time1compnon&#39;</span>,<span class="st">&#39;out3comp2time2compnon&#39;</span>,<span class="st">&#39;out3comp2time3compnon&#39;</span>),</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out3comp2time1age&#39;</span>,<span class="st">&#39;es_out3comp2time2age&#39;</span>,<span class="st">&#39;es_out3comp2time3age&#39;</span>) ),</span>
 <span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
 <span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
 <span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
 <span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>out3comp3.long1 <span class="ot">&lt;-</span> out3comp3.long[ <span class="fu">order</span>( out3comp3.long<span class="sc">$</span>record_id, out3comp3.long<span class="sc">$</span>time ), ]</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>out3comp3.long1<span class="sc">$</span>comparison <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>out3comp2.long1 <span class="ot">&lt;-</span> out3comp2.long[ <span class="fu">order</span>( out3comp2.long<span class="sc">$</span>record_id, out3comp2.long<span class="sc">$</span>time ), ]</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>out3comp2.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
+<p>Create outcome 1, comparison 3 data frame</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>out3comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">688</span><span class="sc">:</span><span class="dv">739</span> ) ]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>out3comp3.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out3comp3,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1estype&#39;</span>,<span class="st">&#39;out3comp3time2estype&#39;</span>,<span class="st">&#39;out3comp3time3estype&#39;</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esdesc =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1esdesc&#39;</span>,<span class="st">&#39;out3comp3time2esdesc&#39;</span>,<span class="st">&#39;out3comp3time3esdesc&#39;</span>),</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">esmethod =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1esmethod&#39;</span>,<span class="st">&#39;out3comp3time2esmethod&#39;</span>,<span class="st">&#39;out3comp3time3esmethod&#39;</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp3time1&#39;</span>,<span class="st">&#39;es_out3comp3time2&#39;</span>,<span class="st">&#39;es_out3comp3time3&#39;</span>),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se.report =</span> <span class="fu">c</span>(<span class="st">&#39;es_se_report_o3c3t1&#39;</span>,<span class="st">&#39;es_se_report_o3c3t2&#39;</span>,<span class="st">&#39;es_se_report_o3c3t3&#39;</span>),</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">es.se =</span> <span class="fu">c</span>( <span class="st">&#39;es_se_o3c3t1&#39;</span>,<span class="st">&#39;es_se_o3c3t2&#39;</span>,<span class="st">&#39;es_se_o3c3t3&#39;</span>),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">n =</span> <span class="fu">c</span>(<span class="st">&#39;es_out3comp3time1n&#39;</span>,<span class="st">&#39;es_out3comp3time2n&#39;</span>,<span class="st">&#39;es_out3comp3time3n&#39;</span>),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1expevent&#39;</span>,<span class="st">&#39;out3comp3time2expevent&#39;</span>,<span class="st">&#39;out3comp3time3expevent&#39;</span>),</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">expnonevent =</span> <span class="fu">c</span>(<span class="st">&#39;out3comp3time1expnon&#39;</span>,<span class="st">&#39;out3comp3time2expnon&#39;</span>,<span class="st">&#39;out3comp3time3expnon&#39;</span>),</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp3time1compevent&#39;</span>,<span class="st">&#39;out3comp3time2compevent&#39;</span>,<span class="st">&#39;out3comp3time3compevent&#39;</span>),</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">compnonevent =</span> <span class="fu">c</span>( <span class="st">&#39;out3comp3time1compnon&#39;</span>,<span class="st">&#39;out3comp3time2compnon&#39;</span>,<span class="st">&#39;out3comp3time3compnon&#39;</span>),</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">outage =</span> <span class="fu">c</span>( <span class="st">&#39;es_out3comp3time1age&#39;</span>,<span class="st">&#39;es_out3comp3time2age&#39;</span>,<span class="st">&#39;es_out3comp3time3age&#39;</span>) ),</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">v.names =</span> <span class="fu">c</span>( <span class="st">&#39;estype&#39;</span>,<span class="st">&#39;esdesc&#39;</span>,<span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se.report&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>,<span class="st">&#39;outage&#39;</span> ),</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">direction =</span> <span class="st">&#39;long&#39;</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">idvar =</span> <span class="st">&#39;id&#39;</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">times =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span> </span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>                           )</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>out3comp3.long1 <span class="ot">&lt;-</span> out3comp3.long[ <span class="fu">order</span>( out3comp3.long<span class="sc">$</span>record_id, out3comp3.long<span class="sc">$</span>time ), ]</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>out3comp3.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
 <p>Merge all outcome 1 data frames together</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out3comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out3comp2.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out3comp3.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>out3varying <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out3comp1.long1, out3comp2.long1, out3comp3.long1 )</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>out3all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out3, out3varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out3comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out3comp2.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out3comp3.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>out3varying <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out3comp1.long1, out3comp2.long1, out3comp3.long1 )</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>out3all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out3, out3varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>out3all<span class="sc">$</span>outid <span class="ot">&lt;-</span> <span class="dv">3</span></span></code></pre></div>
 </div>
 <div id="combine-all-three-outcomes" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Combine all three
 outcomes</h1>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>vary <span class="ot">&lt;-</span> <span class="fu">setdiff</span>( <span class="fu">names</span>( out1all ), <span class="fu">names</span>( out2all ) )</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>vary1 <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;out1&quot;</span>, <span class="st">&quot;out&quot;</span>, vary)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(out1all)[<span class="fu">colnames</span>(out1all) <span class="sc">%in%</span> vary ] <span class="ot">&lt;-</span> vary1</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>vary2 <span class="ot">&lt;-</span> <span class="fu">setdiff</span>( <span class="fu">names</span>( out2all ), <span class="fu">names</span>( out3all ) )</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(out2all)[<span class="fu">colnames</span>(out2all) <span class="sc">%in%</span> vary2 ] <span class="ot">&lt;-</span> vary1</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>vary3 <span class="ot">&lt;-</span> <span class="fu">setdiff</span>( <span class="fu">names</span>( out3all ), <span class="fu">names</span>( out1all ) )</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(out3all)[<span class="fu">colnames</span>(out3all) <span class="sc">%in%</span> vary3 ] <span class="ot">&lt;-</span> vary1</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>dfall <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out1all, out2all, out3all )</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>dfall[ dfall <span class="sc">==</span> <span class="sc">-</span><span class="dv">999</span> ] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="co">#save( dfall, file = &#39;dfall.RData&#39; )</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>vary <span class="ot">&lt;-</span> <span class="fu">setdiff</span>( <span class="fu">names</span>( out1all ), <span class="fu">names</span>( out2all ) )</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>vary1 <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;out1&quot;</span>, <span class="st">&quot;out&quot;</span>, vary)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(out1all)[<span class="fu">colnames</span>(out1all) <span class="sc">%in%</span> vary ] <span class="ot">&lt;-</span> vary1</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>vary2 <span class="ot">&lt;-</span> <span class="fu">setdiff</span>( <span class="fu">names</span>( out2all ), <span class="fu">names</span>( out3all ) )</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(out2all)[<span class="fu">colnames</span>(out2all) <span class="sc">%in%</span> vary2 ] <span class="ot">&lt;-</span> vary1</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>vary3 <span class="ot">&lt;-</span> <span class="fu">setdiff</span>( <span class="fu">names</span>( out3all ), <span class="fu">names</span>( out1all ) )</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(out3all)[<span class="fu">colnames</span>(out3all) <span class="sc">%in%</span> vary3 ] <span class="ot">&lt;-</span> vary1</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>dfall <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out1all, out2all, out3all )</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>dfall[ dfall <span class="sc">==</span> <span class="sc">-</span><span class="dv">999</span> ] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+<p>Create a subset of the data frame containing only comparisons between
+RSV+ and RSV- LRTI.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dfsub <span class="ot">&lt;-</span> <span class="fu">subset</span>( dfall, type <span class="sc">==</span> <span class="dv">2</span> )</span></code></pre></div>
+</div>
+<div id="data-inspection-cleaning" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Data inspection &amp;
+cleaning</h1>
+<p>Look at a summaries of the variables in the data set</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>( dfsub )</span></code></pre></div>
+<pre><code>##    record_id        outdesc               out          outprimary   
+##  Min.   :  2.00   Length:354         Min.   :1.000   Min.   :1.000  
+##  1st Qu.: 42.00   Class :character   1st Qu.:1.000   1st Qu.:1.000  
+##  Median : 75.00   Mode  :character   Median :2.000   Median :1.000  
+##  Mean   : 73.33                      Mean   :1.686   Mean   :1.653  
+##  3rd Qu.:114.00                      3rd Qu.:2.000   3rd Qu.:2.000  
+##  Max.   :125.00                      Max.   :3.000   Max.   :3.000  
+##                                                                     
+##     outtype  outanalysis___1   outanalysis___2  outanalysis___3 
+##  Min.   :1   Min.   :0.00000   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:1   1st Qu.:0.00000   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :1   Median :0.00000   Median :1.0000   Median :0.0000  
+##  Mean   :1   Mean   :0.05932   Mean   :0.5085   Mean   :0.1271  
+##  3rd Qu.:1   3rd Qu.:0.00000   3rd Qu.:1.0000   3rd Qu.:0.0000  
+##  Max.   :1   Max.   :1.00000   Max.   :1.0000   Max.   :1.0000  
+##                                                                 
+##  outanalysis___4  outanalysisdesc    outhowgconfound___1 outhowgconfound___2
+##  Min.   :0.0000   Length:354         Min.   :0.0000      Min.   :0.0000     
+##  1st Qu.:0.0000   Class :character   1st Qu.:0.0000      1st Qu.:0.0000     
+##  Median :0.0000   Mode  :character   Median :0.0000      Median :0.0000     
+##  Mean   :0.3305                      Mean   :0.0678      Mean   :0.2966     
+##  3rd Qu.:1.0000                      3rd Qu.:0.0000      3rd Qu.:1.0000     
+##  Max.   :1.0000                      Max.   :1.0000      Max.   :1.0000     
+##                                                                             
+##  outhowgconfound___3 outhowgconfound___4 outhowgconfound___5
+##  Min.   :0.0000      Min.   :0           Min.   :0          
+##  1st Qu.:0.0000      1st Qu.:0           1st Qu.:0          
+##  Median :0.0000      Median :0           Median :0          
+##  Mean   :0.0339      Mean   :0           Mean   :0          
+##  3rd Qu.:0.0000      3rd Qu.:0           3rd Qu.:0          
+##  Max.   :1.0000      Max.   :0           Max.   :0          
+##                                                             
+##  outhowgconfound___6 outhowgconfound___7 outhowgconfound___8 outhowconfounddesc
+##  Min.   :0.00000     Min.   :0.00000     Min.   :0.0000      Length:354        
+##  1st Qu.:0.00000     1st Qu.:0.00000     1st Qu.:0.0000      Class :character  
+##  Median :0.00000     Median :0.00000     Median :0.0000      Mode  :character  
+##  Mean   :0.05932     Mean   :0.01695     Mean   :0.2966                        
+##  3rd Qu.:0.00000     3rd Qu.:0.00000     3rd Qu.:1.0000                        
+##  Max.   :1.00000     Max.   :1.00000     Max.   :1.0000                        
+##                                                                                
+##  outconfdomains___1 outconfdomains___2 outconfdomains___3 outconfdomains___4
+##  Min.   :0.0000     Min.   :0.0000     Min.   :0.0000     Min.   :0.00000   
+##  1st Qu.:0.0000     1st Qu.:0.0000     1st Qu.:0.0000     1st Qu.:0.00000   
+##  Median :0.0000     Median :0.0000     Median :0.0000     Median :0.00000   
+##  Mean   :0.1949     Mean   :0.0339     Mean   :0.1186     Mean   :0.08475   
+##  3rd Qu.:0.0000     3rd Qu.:0.0000     3rd Qu.:0.0000     3rd Qu.:0.00000   
+##  Max.   :1.0000     Max.   :1.0000     Max.   :1.0000     Max.   :1.00000   
+##                                                                             
+##  outconfdomains___5 outconfdomains___6 outconfdomains___7 outconfdomains___8
+##  Min.   :0.0000     Min.   :0.000000   Min.   :0.00000    Min.   :0.00000   
+##  1st Qu.:0.0000     1st Qu.:0.000000   1st Qu.:0.00000    1st Qu.:0.00000   
+##  Median :0.0000     Median :0.000000   Median :0.00000    Median :0.00000   
+##  Mean   :0.2712     Mean   :0.008475   Mean   :0.05085    Mean   :0.08475   
+##  3rd Qu.:1.0000     3rd Qu.:0.000000   3rd Qu.:0.00000    3rd Qu.:0.00000   
+##  Max.   :1.0000     Max.   :1.000000   Max.   :1.00000    Max.   :1.00000   
+##                                                                             
+##  outconfdomains___9 outconfdomains___10 outconfdomains___11 outconfdomains___12
+##  Min.   :0.00000    Min.   :0.0000      Min.   :0.000000    Min.   :0          
+##  1st Qu.:0.00000    1st Qu.:0.0000      1st Qu.:0.000000    1st Qu.:0          
+##  Median :0.00000    Median :0.0000      Median :0.000000    Median :0          
+##  Mean   :0.07627    Mean   :0.0339      Mean   :0.008475    Mean   :0          
+##  3rd Qu.:0.00000    3rd Qu.:0.0000      3rd Qu.:0.000000    3rd Qu.:0          
+##  Max.   :1.00000    Max.   :1.0000      Max.   :1.000000    Max.   :0          
+##                                                                                
+##  outconfdomains___13 outconfdomains___14 outconfdomains___15
+##  Min.   :0.0000      Min.   :0.0000      Min.   :0          
+##  1st Qu.:0.0000      1st Qu.:0.0000      1st Qu.:0          
+##  Median :0.0000      Median :0.0000      Median :0          
+##  Mean   :0.1525      Mean   :0.1356      Mean   :0          
+##  3rd Qu.:0.0000      3rd Qu.:0.0000      3rd Qu.:0          
+##  Max.   :1.0000      Max.   :1.0000      Max.   :0          
+##                                                             
+##  outconfdomains___16 outconfdomains___17 outmingenetics outmincoinfect
+##  Min.   :0.000       Min.   :0.0000      Min.   :1      Min.   :1.00  
+##  1st Qu.:0.000       1st Qu.:0.0000      1st Qu.:1      1st Qu.:1.00  
+##  Median :0.000       Median :0.0000      Median :1      Median :1.00  
+##  Mean   :0.161       Mean   :0.3475      Mean   :1      Mean   :1.25  
+##  3rd Qu.:0.000       3rd Qu.:1.0000      3rd Qu.:1      3rd Qu.:1.25  
+##  Max.   :1.000       Max.   :1.0000      Max.   :1      Max.   :2.00  
+##                                          NA&#39;s   :285    NA&#39;s   :342   
+##   outminatopic   outminneonatal outminchildsex  outminantibiotic   outminses  
+##  Min.   :1.000   Min.   :1.0    Min.   :1.000   Min.   :1        Min.   :1.0  
+##  1st Qu.:1.000   1st Qu.:1.0    1st Qu.:2.000   1st Qu.:1        1st Qu.:1.0  
+##  Median :1.000   Median :1.0    Median :2.000   Median :1        Median :1.5  
+##  Mean   :1.429   Mean   :1.4    Mean   :1.938   Mean   :1        Mean   :1.5  
+##  3rd Qu.:2.000   3rd Qu.:2.0    3rd Qu.:2.000   3rd Qu.:1        3rd Qu.:2.0  
+##  Max.   :2.000   Max.   :2.0    Max.   :2.000   Max.   :1        Max.   :2.0  
+##  NA&#39;s   :312     NA&#39;s   :324    NA&#39;s   :258     NA&#39;s   :351      NA&#39;s   :336  
+##  outminsibling outminsmoking outminnutrition outminallergens outminpollution
+##  Min.   :2     Min.   :1.0   Min.   :1.00    Min.   :1       Min.   : NA    
+##  1st Qu.:2     1st Qu.:1.0   1st Qu.:1.00    1st Qu.:1       1st Qu.: NA    
+##  Median :2     Median :1.5   Median :1.00    Median :1       Median : NA    
+##  Mean   :2     Mean   :1.5   Mean   :1.25    Mean   :1       Mean   :NaN    
+##  3rd Qu.:2     3rd Qu.:2.0   3rd Qu.:1.25    3rd Qu.:1       3rd Qu.: NA    
+##  Max.   :2     Max.   :2.0   Max.   :2.00    Max.   :1       Max.   : NA    
+##  NA&#39;s   :324   NA&#39;s   :330   NA&#39;s   :342     NA&#39;s   :351     NA&#39;s   :354    
+##   outminageexp    outminageout     expdesc           expmeth___1    
+##  Min.   :1.000   Min.   :1.000   Length:354         Min.   :0.0000  
+##  1st Qu.:2.000   1st Qu.:2.000   Class :character   1st Qu.:1.0000  
+##  Median :2.000   Median :2.000   Mode  :character   Median :1.0000  
+##  Mean   :1.944   Mean   :1.938                      Mean   :0.9661  
+##  3rd Qu.:2.000   3rd Qu.:2.000                      3rd Qu.:1.0000  
+##  Max.   :2.000   Max.   :2.000                      Max.   :1.0000  
+##  NA&#39;s   :300     NA&#39;s   :306                                        
+##   expmeth___2      expmeth___3  expmeth___4        expmeth___5    exptype     
+##  Min.   :0.0000   Min.   :0    Min.   :0.000000   Min.   :0    Min.   :0.000  
+##  1st Qu.:0.0000   1st Qu.:0    1st Qu.:0.000000   1st Qu.:0    1st Qu.:2.000  
+##  Median :0.0000   Median :0    Median :0.000000   Median :0    Median :2.000  
+##  Mean   :0.0339   Mean   :0    Mean   :0.008475   Mean   :0    Mean   :1.709  
+##  3rd Qu.:0.0000   3rd Qu.:0    3rd Qu.:0.000000   3rd Qu.:0    3rd Qu.:2.000  
+##  Max.   :1.0000   Max.   :0    Max.   :1.000000   Max.   :0    Max.   :2.000  
+##                                                                NA&#39;s   :3      
+##   exptime___1     exptime___2      exptime___3     exptimedesc       
+##  Min.   :0.000   Min.   :0.0000   Min.   :0.0000   Length:354        
+##  1st Qu.:0.000   1st Qu.:0.0000   1st Qu.:0.0000   Class :character  
+##  Median :0.000   Median :0.0000   Median :0.0000   Mode  :character  
+##  Mean   :0.339   Mean   :0.4746   Mean   :0.1864                     
+##  3rd Qu.:1.000   3rd Qu.:1.0000   3rd Qu.:0.0000                     
+##  Max.   :1.000   Max.   :1.0000   Max.   :1.0000                     
+##                                                                      
+##    compdesc              type    time2needed      time3needed      expdesc.1  
+##  Length:354         Min.   :2   Min.   : 2.000   Min.   :1.000   Min.   :1.0  
+##  Class :character   1st Qu.:2   1st Qu.: 2.000   1st Qu.:1.000   1st Qu.:1.0  
+##  Mode  :character   Median :2   Median : 2.000   Median :1.000   Median :1.0  
+##                     Mean   :2   Mean   : 2.076   Mean   :1.044   Mean   :1.2  
+##                     3rd Qu.:2   3rd Qu.: 2.000   3rd Qu.:1.000   3rd Qu.:1.0  
+##                     Max.   :2   Max.   :10.000   Max.   :2.000   Max.   :2.0  
+##                                                  NA&#39;s   :15      NA&#39;s   :339  
+##       time       estype          esdesc             esmethod    
+##  Min.   :1   Min.   : 1.000   Length:354         Min.   :1.000  
+##  1st Qu.:1   1st Qu.: 1.000   Class :character   1st Qu.:1.000  
+##  Median :2   Median : 1.000   Mode  :character   Median :2.000  
+##  Mean   :2   Mean   : 2.879                      Mean   :1.548  
+##  3rd Qu.:3   3rd Qu.: 4.000                      3rd Qu.:2.000  
+##  Max.   :3   Max.   :10.000                      Max.   :2.000  
+##              NA&#39;s   :230                         NA&#39;s   :230    
+##        es           es.se.report       es.se                n        
+##  Min.   :  0.070   Min.   :1.000   Min.   :  0.0300   Min.   :   12  
+##  1st Qu.:  0.435   1st Qu.:1.000   1st Qu.:  0.3600   1st Qu.:   74  
+##  Median :  0.930   Median :1.000   Median :  0.5550   Median :  102  
+##  Mean   :  2.427   Mean   :1.016   Mean   :  2.0344   Mean   :  889  
+##  3rd Qu.:  1.410   3rd Qu.:1.000   3rd Qu.:  0.7325   3rd Qu.:  294  
+##  Max.   :102.000   Max.   :2.000   Max.   :163.0000   Max.   :24211  
+##  NA&#39;s   :231       NA&#39;s   :230     NA&#39;s   :242        NA&#39;s   :233    
+##     expevent       expnonevent        compevent       compnonevent    
+##  Min.   :   0.0   Min.   :   2.00   Min.   :   0.0   Min.   :    0.0  
+##  1st Qu.:   6.0   1st Qu.:  15.50   1st Qu.:   7.0   1st Qu.:   11.0  
+##  Median :  14.0   Median :  28.00   Median :  12.0   Median :   22.0  
+##  Mean   :  85.3   Mean   : 220.29   Mean   : 109.1   Mean   :  450.5  
+##  3rd Qu.:  31.0   3rd Qu.:  56.25   3rd Qu.:  29.0   3rd Qu.:   37.0  
+##  Max.   :3178.0   Max.   :8296.00   Max.   :3444.0   Max.   :12080.0  
+##  NA&#39;s   :260      NA&#39;s   :262       NA&#39;s   :265      NA&#39;s   :265      
+##     outage                id             compid          outid      
+##  Length:354         Min.   :  2.00   Min.   :1.000   Min.   :1.000  
+##  Class :character   1st Qu.: 42.00   1st Qu.:1.000   1st Qu.:1.000  
+##  Mode  :character   Median : 75.00   Median :1.000   Median :1.000  
+##                     Mean   : 73.33   Mean   :1.492   Mean   :1.381  
+##                     3rd Qu.:114.00   3rd Qu.:2.000   3rd Qu.:2.000  
+##                     Max.   :125.00   Max.   :3.000   Max.   :3.000  
+## </code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span>( <span class="fu">describe</span>( dfsub[, <span class="fu">c</span>(<span class="st">&#39;estype&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>)] ) )</span></code></pre></div>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<script type="text/javascript">
+<!--
+    function expand_collapse(id) {
+       var e = document.getElementById(id);
+       var f = document.getElementById(id+"_earrows");
+       if(e.style.display == 'none'){
+          e.style.display = 'block';
+          f.innerHTML = '&#9650';
+       }
+       else {
+          e.style.display = 'none';
+          f.innerHTML = '&#9660';
+       }
+    }
+//-->
+</script>
+<style>
+.earrows {color:silver;font-size:11px;}
+
+fcap {
+ font-family: Verdana;
+ font-size: 12px;
+ color: MidnightBlue
+ }
+
+smg {
+ font-family: Verdana;
+ font-size: 10px;
+ color: &#808080;
+}
+
+hr.thinhr { margin-top: 0.15em; margin-bottom: 0.15em; }
+
+span.xscript {
+position: relative;
+}
+span.xscript sub {
+position: absolute;
+left: 0.1em;
+bottom: -1ex;
+}
+</style>
+ <font color="MidnightBlue"><div align=center><span style="font-weight:bold">dfsub[, c("estype", "es", "es.se")] <br><br> 3  Variables   354  Observations</span></div></font> <hr class="thinhr"> <span style="font-weight:bold">estype</span><div style='float: right; text-align: right;'><img src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAACVBMVEUAAADMzMz////1iUV5AAAAI0lEQVQImWNgYEQCDAxMSIB8HjlmMjCAeDARTB4DI8xcBgYAX9AA/EeX2CIAAAAASUVORK5CYII=" alt="image" /></div> <style>
+ .hmisctable896300 {
+ border: none;
+ font-size: 85%;
+ }
+ .hmisctable896300 td {
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable896300 th {
+ color: MidnightBlue;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: normal;
+ }
+ </style>
+ <table class="hmisctable896300">
+ <tr><th>n</th><th>missing</th><th>distinct</th><th>Info</th><th>Mean</th><th>Gmd</th></tr>
+ <tr><td>124</td><td>230</td><td>4</td><td>0.694</td><td>2.879</td><td>2.914</td></tr>
+ </table>
+ <pre style="font-size:85%;">
+ Value          1     2     4    10
+ Frequency     83     5    16    20
+ Proportion 0.669 0.040 0.129 0.161
+ </pre>
+ <hr class="thinhr"> <span style="font-weight:bold">es</span><div style='float: right; text-align: right;'><img src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAE8AAAANCAMAAADfesPTAAAACVBMVEUAAADMzMz////1iUV5AAAAOUlEQVQ4jWNgZGBgpCJgYGJgYKIiGDWPQvOA8UvNCAa5j5oOHJHmUdFAcPyCohgUy8gRTVakMzACAPmBBtZrdh69AAAAAElFTkSuQmCC" alt="image" /></div> <style>
+ .hmisctable645045 {
+ border: none;
+ font-size: 85%;
+ }
+ .hmisctable645045 td {
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable645045 th {
+ color: MidnightBlue;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: normal;
+ }
+ </style>
+ <table class="hmisctable645045">
+ <tr><th>n</th><th>missing</th><th>distinct</th><th>Info</th><th>Mean</th><th>Gmd</th><th>.05</th><th>.10</th><th>.25</th><th>.50</th><th>.75</th><th>.90</th><th>.95</th></tr>
+ <tr><td>123</td><td>231</td><td>94</td><td>1</td><td>2.427</td><td>3.507</td><td>0.180</td><td>0.252</td><td>0.435</td><td>0.930</td><td>1.410</td><td>2.920</td><td>5.131</td></tr>
+ </table>
+ <span style="font-size: 85%;"><font color="MidnightBlue">lowest</font> :   0.07   0.12   0.13   0.15   0.17 ,  <font color="MidnightBlue">highest</font>:   9.35   9.92  14.40  30.12 102.00</span> <hr class="thinhr"> <span style="font-weight:bold">es.se</span><div style='float: right; text-align: right;'><img src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAABAAAAANCAMAAACXZR4WAAAACVBMVEUAAADMzMz////1iUV5AAAAF0lEQVQImWNgYEQFDAxMqIA6AgNhCwMAlRoBWdrVTHYAAAAASUVORK5CYII=" alt="image" /></div> <style>
+ .hmisctable326823 {
+ border: none;
+ font-size: 74%;
+ }
+ .hmisctable326823 td {
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable326823 th {
+ color: MidnightBlue;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: normal;
+ }
+ </style>
+ <table class="hmisctable326823">
+ <tr><th>n</th><th>missing</th><th>distinct</th><th>Info</th><th>Mean</th><th>Gmd</th><th>.05</th><th>.10</th><th>.25</th><th>.50</th><th>.75</th><th>.90</th><th>.95</th></tr>
+ <tr><td>112</td><td>242</td><td>72</td><td>1</td><td>2.034</td><td>3.252</td><td>0.1210</td><td>0.1620</td><td>0.3600</td><td>0.5550</td><td>0.7325</td><td>0.9880</td><td>1.2890</td></tr>
+ </table>
+ <span style="font-size: 85%;"><font color="MidnightBlue">lowest</font> :   0.03   0.04   0.06   0.09   0.10 ,  <font color="MidnightBlue">highest</font>:   1.30   1.48   1.59   1.67 163.00</span> <pre style="font-size:85%;">
+ Value        0.0   0.5   1.0   1.5 163.0
+ Frequency     15    70    20     6     1
+ Proportion 0.134 0.625 0.179 0.054 0.009
+ </pre>
+  For the frequency table, variable is rounded to the nearest 0.5 <hr class="thinhr">
+<p><br></p>
+<p>There are some suspicious effect estimates that seem unusually large
+or small – could be due to a small sample size but need to inspect.
+Particularly, record_id 118 has an OR = 102. Based on the
+event/non-event rates, this appears to be due to a misplaced decimal, so
+it should be 1.02. Also, there was an infeasibly large standard error
+for record_id 133 (se = 163). When I recalculated it based on the
+adjustement estimate and 95% CI, I got 0.37, which was consistent with
+the SE for the other estimates reported in this study. I made these
+change in the data frames, but this should also be changes in REDCap to
+avoid future problems. The smallest ES was 0.07, but this looks legit
+based on the event/non-event frequencies provided. We might want to do a
+more global quality assurance check.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>es<span class="sc">==</span><span class="dv">102</span> ), <span class="fu">c</span>(<span class="st">&#39;record_id&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>) ]</span></code></pre></div>
+<pre><code>##      record_id  es es.se   n expevent expnonevent compevent compnonevent
+## 1054       118 102  0.25 294      107         112        45           48</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>record_id <span class="sc">==</span> <span class="dv">118</span> ), <span class="st">&#39;es&#39;</span>]</span></code></pre></div>
+<pre><code>## [1] 102.00     NA   0.93     NA   1.27     NA     NA     NA     NA</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dfall<span class="sc">$</span>es[ <span class="fu">which</span>( dfall<span class="sc">$</span>record_id <span class="sc">==</span> <span class="dv">118</span> <span class="sc">&amp;</span> dfall<span class="sc">$</span>es <span class="sc">==</span> <span class="dv">102</span> ) ] <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>dfsub<span class="sc">$</span>es[ <span class="fu">which</span>( dfsub<span class="sc">$</span>record_id <span class="sc">==</span> <span class="dv">118</span> <span class="sc">&amp;</span> dfsub<span class="sc">$</span>es <span class="sc">==</span> <span class="dv">102</span> ) ] <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>es<span class="sc">==</span>.<span class="dv">07</span> ), <span class="fu">c</span>(<span class="st">&#39;record_id&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>) ]</span></code></pre></div>
+<pre><code>##     record_id   es es.se   n expevent expnonevent compevent compnonevent
+## 694        78 0.07  1.02 191       16         106        43           26</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>es<span class="sc">==</span><span class="fl">30.12</span> ), <span class="fu">c</span>(<span class="st">&#39;record_id&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>) ]</span></code></pre></div>
+<pre><code>##     record_id    es es.se  n expevent expnonevent compevent compnonevent
+## 408        46 30.12  1.48 61       32          20         0            9</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>es.se <span class="sc">==</span> <span class="dv">163</span> ), <span class="fu">c</span>( <span class="st">&#39;record_id&#39;</span>,<span class="st">&#39;es&#39;</span>, <span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es.se&#39;</span> ) ]</span></code></pre></div>
+<pre><code>##      record_id   es esmethod es.se
+## 2141       113 1.02        1   163</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>dfsub<span class="sc">$</span>es.se[ <span class="fu">which</span>( dfsub<span class="sc">$</span>record_id <span class="sc">==</span> <span class="dv">113</span> <span class="sc">&amp;</span> dfsub<span class="sc">$</span>es.se <span class="sc">==</span> <span class="dv">163</span> ) ] <span class="ot">&lt;-</span> .<span class="dv">37</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># save( dfall, file = &#39;dfall.RData&#39; )</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># save( dfsub, file = &#39;dfsub.RData&#39; )</span></span></code></pre></div>
 </div>
 
 

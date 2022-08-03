@@ -11,7 +11,7 @@
 
 <meta name="author" content="Steve Brunwasser" />
 
-<meta name="date" content="2022-08-01" />
+<meta name="date" content="2022-08-03" />
 
 <title>Analyses</title>
 
@@ -449,195 +449,67 @@ div.tocify {
 
 <h1 class="title toc-ignore">Analyses</h1>
 <h4 class="author">Steve Brunwasser</h4>
-<h4 class="date">2022-08-01</h4>
+<h4 class="date">2022-08-03</h4>
 
 </div>
 
 
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">warning =</span> F, <span class="at">message =</span> F)</span></code></pre></div>
 <div id="prepare-workspace" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Prepare Workspace</h1>
 <p>Load packages</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( robumeta )</span></code></pre></div>
-<pre><code>## Loading required package: robumeta</code></pre>
-<pre><code>## Warning: package &#39;robumeta&#39; was built under R version 4.2.1</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( Hmisc )</span></code></pre></div>
-<pre><code>## Loading required package: Hmisc</code></pre>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre><code>## Loading required package: survival</code></pre>
-<pre><code>## Loading required package: Formula</code></pre>
-<pre><code>## Loading required package: ggplot2</code></pre>
-<pre><code>## 
-## Attaching package: &#39;Hmisc&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( robumeta )</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( Hmisc )</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( ggplot2 )</span></code></pre></div>
+<p>Load the data frame</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>( <span class="st">&#39;dfsub.RData&#39;</span> )</span></code></pre></div>
+</div>
+<div id="descriptives" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Descriptives</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dfsub<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>dfsub<span class="sc">$</span>es.se</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>qqplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( dfsub, <span class="fu">aes</span>( <span class="at">sample =</span> <span class="fu">log</span>( es ) ) ) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>( ) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>( )</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>qqplot</span></code></pre></div>
+<p><img src="analyses_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dfsub <span class="ot">&lt;-</span> dfsub[ <span class="fu">order</span>( dfsub<span class="sc">$</span>record_id, dfsub<span class="sc">$</span>outid, dfsub<span class="sc">$</span>compid, dfsub<span class="sc">$</span>time ), ]</span></code></pre></div>
+</div>
+<div id="analyses" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Analyses</h1>
+<p>Run an intercept-only model, providing just a marginal and unadjusted
+mean effect size.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">robu</span>( <span class="fu">log</span>( es ) <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">studynum =</span> record_id, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">var.eff.size =</span> es.se<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> dfsub,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">modelweights =</span> <span class="st">&#39;CORR&#39;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">small =</span> T</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>( m1 )</span></code></pre></div>
+<pre><code>## RVE: Correlated Effects Model with Small-Sample Corrections 
 ## 
-##     format.pval, units</code></pre>
-<p>Read in <em>dfall.RData</em> data frame created in the “Data Prep”
-page.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>( <span class="st">&#39;dfall.RData&#39;</span> )</span></code></pre></div>
-<p>Create a subset of the data frame containing only comparisons between
-RSV+ and RSV- LRTI.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dfsub <span class="ot">&lt;-</span> <span class="fu">subset</span>( dfall, type <span class="sc">==</span> <span class="dv">2</span> )</span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>( dfsub )</span></code></pre></div>
-<pre><code>##    record_id        outdesc               out          outprimary   
-##  Min.   :  2.00   Length:354         Min.   :1.000   Min.   :1.000  
-##  1st Qu.: 42.00   Class :character   1st Qu.:1.000   1st Qu.:1.000  
-##  Median : 75.00   Mode  :character   Median :2.000   Median :1.000  
-##  Mean   : 73.33                      Mean   :1.686   Mean   :1.653  
-##  3rd Qu.:114.00                      3rd Qu.:2.000   3rd Qu.:2.000  
-##  Max.   :125.00                      Max.   :3.000   Max.   :3.000  
-##                                                                     
-##     outtype  outanalysis___1   outanalysis___2  outanalysis___3 
-##  Min.   :1   Min.   :0.00000   Min.   :0.0000   Min.   :0.0000  
-##  1st Qu.:1   1st Qu.:0.00000   1st Qu.:0.0000   1st Qu.:0.0000  
-##  Median :1   Median :0.00000   Median :1.0000   Median :0.0000  
-##  Mean   :1   Mean   :0.05932   Mean   :0.5085   Mean   :0.1271  
-##  3rd Qu.:1   3rd Qu.:0.00000   3rd Qu.:1.0000   3rd Qu.:0.0000  
-##  Max.   :1   Max.   :1.00000   Max.   :1.0000   Max.   :1.0000  
-##                                                                 
-##  outanalysis___4  outanalysisdesc    outhowgconfound___1 outhowgconfound___2
-##  Min.   :0.0000   Length:354         Min.   :0.0000      Min.   :0.0000     
-##  1st Qu.:0.0000   Class :character   1st Qu.:0.0000      1st Qu.:0.0000     
-##  Median :0.0000   Mode  :character   Median :0.0000      Median :0.0000     
-##  Mean   :0.3305                      Mean   :0.0678      Mean   :0.2966     
-##  3rd Qu.:1.0000                      3rd Qu.:0.0000      3rd Qu.:1.0000     
-##  Max.   :1.0000                      Max.   :1.0000      Max.   :1.0000     
-##                                                                             
-##  outhowgconfound___3 outhowgconfound___4 outhowgconfound___5
-##  Min.   :0.0000      Min.   :0           Min.   :0          
-##  1st Qu.:0.0000      1st Qu.:0           1st Qu.:0          
-##  Median :0.0000      Median :0           Median :0          
-##  Mean   :0.0339      Mean   :0           Mean   :0          
-##  3rd Qu.:0.0000      3rd Qu.:0           3rd Qu.:0          
-##  Max.   :1.0000      Max.   :0           Max.   :0          
-##                                                             
-##  outhowgconfound___6 outhowgconfound___7 outhowgconfound___8 outhowconfounddesc
-##  Min.   :0.00000     Min.   :0.00000     Min.   :0.0000      Length:354        
-##  1st Qu.:0.00000     1st Qu.:0.00000     1st Qu.:0.0000      Class :character  
-##  Median :0.00000     Median :0.00000     Median :0.0000      Mode  :character  
-##  Mean   :0.05932     Mean   :0.01695     Mean   :0.2966                        
-##  3rd Qu.:0.00000     3rd Qu.:0.00000     3rd Qu.:1.0000                        
-##  Max.   :1.00000     Max.   :1.00000     Max.   :1.0000                        
-##                                                                                
-##  outconfdomains___1 outconfdomains___2 outconfdomains___3 outconfdomains___4
-##  Min.   :0.0000     Min.   :0.0000     Min.   :0.0000     Min.   :0.00000   
-##  1st Qu.:0.0000     1st Qu.:0.0000     1st Qu.:0.0000     1st Qu.:0.00000   
-##  Median :0.0000     Median :0.0000     Median :0.0000     Median :0.00000   
-##  Mean   :0.1949     Mean   :0.0339     Mean   :0.1186     Mean   :0.08475   
-##  3rd Qu.:0.0000     3rd Qu.:0.0000     3rd Qu.:0.0000     3rd Qu.:0.00000   
-##  Max.   :1.0000     Max.   :1.0000     Max.   :1.0000     Max.   :1.00000   
-##                                                                             
-##  outconfdomains___5 outconfdomains___6 outconfdomains___7 outconfdomains___8
-##  Min.   :0.0000     Min.   :0.000000   Min.   :0.00000    Min.   :0.00000   
-##  1st Qu.:0.0000     1st Qu.:0.000000   1st Qu.:0.00000    1st Qu.:0.00000   
-##  Median :0.0000     Median :0.000000   Median :0.00000    Median :0.00000   
-##  Mean   :0.2712     Mean   :0.008475   Mean   :0.05085    Mean   :0.08475   
-##  3rd Qu.:1.0000     3rd Qu.:0.000000   3rd Qu.:0.00000    3rd Qu.:0.00000   
-##  Max.   :1.0000     Max.   :1.000000   Max.   :1.00000    Max.   :1.00000   
-##                                                                             
-##  outconfdomains___9 outconfdomains___10 outconfdomains___11 outconfdomains___12
-##  Min.   :0.00000    Min.   :0.0000      Min.   :0.000000    Min.   :0          
-##  1st Qu.:0.00000    1st Qu.:0.0000      1st Qu.:0.000000    1st Qu.:0          
-##  Median :0.00000    Median :0.0000      Median :0.000000    Median :0          
-##  Mean   :0.07627    Mean   :0.0339      Mean   :0.008475    Mean   :0          
-##  3rd Qu.:0.00000    3rd Qu.:0.0000      3rd Qu.:0.000000    3rd Qu.:0          
-##  Max.   :1.00000    Max.   :1.0000      Max.   :1.000000    Max.   :0          
-##                                                                                
-##  outconfdomains___13 outconfdomains___14 outconfdomains___15
-##  Min.   :0.0000      Min.   :0.0000      Min.   :0          
-##  1st Qu.:0.0000      1st Qu.:0.0000      1st Qu.:0          
-##  Median :0.0000      Median :0.0000      Median :0          
-##  Mean   :0.1525      Mean   :0.1356      Mean   :0          
-##  3rd Qu.:0.0000      3rd Qu.:0.0000      3rd Qu.:0          
-##  Max.   :1.0000      Max.   :1.0000      Max.   :0          
-##                                                             
-##  outconfdomains___16 outconfdomains___17 outmingenetics outmincoinfect
-##  Min.   :0.000       Min.   :0.0000      Min.   :1      Min.   :1.00  
-##  1st Qu.:0.000       1st Qu.:0.0000      1st Qu.:1      1st Qu.:1.00  
-##  Median :0.000       Median :0.0000      Median :1      Median :1.00  
-##  Mean   :0.161       Mean   :0.3475      Mean   :1      Mean   :1.25  
-##  3rd Qu.:0.000       3rd Qu.:1.0000      3rd Qu.:1      3rd Qu.:1.25  
-##  Max.   :1.000       Max.   :1.0000      Max.   :1      Max.   :2.00  
-##                                          NA&#39;s   :285    NA&#39;s   :342   
-##   outminatopic   outminneonatal outminchildsex  outminantibiotic   outminses  
-##  Min.   :1.000   Min.   :1.0    Min.   :1.000   Min.   :1        Min.   :1.0  
-##  1st Qu.:1.000   1st Qu.:1.0    1st Qu.:2.000   1st Qu.:1        1st Qu.:1.0  
-##  Median :1.000   Median :1.0    Median :2.000   Median :1        Median :1.5  
-##  Mean   :1.429   Mean   :1.4    Mean   :1.938   Mean   :1        Mean   :1.5  
-##  3rd Qu.:2.000   3rd Qu.:2.0    3rd Qu.:2.000   3rd Qu.:1        3rd Qu.:2.0  
-##  Max.   :2.000   Max.   :2.0    Max.   :2.000   Max.   :1        Max.   :2.0  
-##  NA&#39;s   :312     NA&#39;s   :324    NA&#39;s   :258     NA&#39;s   :351      NA&#39;s   :336  
-##  outminsibling outminsmoking outminnutrition outminallergens outminpollution
-##  Min.   :2     Min.   :1.0   Min.   :1.00    Min.   :1       Min.   : NA    
-##  1st Qu.:2     1st Qu.:1.0   1st Qu.:1.00    1st Qu.:1       1st Qu.: NA    
-##  Median :2     Median :1.5   Median :1.00    Median :1       Median : NA    
-##  Mean   :2     Mean   :1.5   Mean   :1.25    Mean   :1       Mean   :NaN    
-##  3rd Qu.:2     3rd Qu.:2.0   3rd Qu.:1.25    3rd Qu.:1       3rd Qu.: NA    
-##  Max.   :2     Max.   :2.0   Max.   :2.00    Max.   :1       Max.   : NA    
-##  NA&#39;s   :324   NA&#39;s   :330   NA&#39;s   :342     NA&#39;s   :351     NA&#39;s   :354    
-##   outminageexp    outminageout     expdesc           expmeth___1    
-##  Min.   :1.000   Min.   :1.000   Length:354         Min.   :0.0000  
-##  1st Qu.:2.000   1st Qu.:2.000   Class :character   1st Qu.:1.0000  
-##  Median :2.000   Median :2.000   Mode  :character   Median :1.0000  
-##  Mean   :1.944   Mean   :1.938                      Mean   :0.9661  
-##  3rd Qu.:2.000   3rd Qu.:2.000                      3rd Qu.:1.0000  
-##  Max.   :2.000   Max.   :2.000                      Max.   :1.0000  
-##  NA&#39;s   :300     NA&#39;s   :306                                        
-##   expmeth___2      expmeth___3  expmeth___4        expmeth___5    exptype     
-##  Min.   :0.0000   Min.   :0    Min.   :0.000000   Min.   :0    Min.   :0.000  
-##  1st Qu.:0.0000   1st Qu.:0    1st Qu.:0.000000   1st Qu.:0    1st Qu.:2.000  
-##  Median :0.0000   Median :0    Median :0.000000   Median :0    Median :2.000  
-##  Mean   :0.0339   Mean   :0    Mean   :0.008475   Mean   :0    Mean   :1.709  
-##  3rd Qu.:0.0000   3rd Qu.:0    3rd Qu.:0.000000   3rd Qu.:0    3rd Qu.:2.000  
-##  Max.   :1.0000   Max.   :0    Max.   :1.000000   Max.   :0    Max.   :2.000  
-##                                                                NA&#39;s   :3      
-##   exptime___1     exptime___2      exptime___3     exptimedesc       
-##  Min.   :0.000   Min.   :0.0000   Min.   :0.0000   Length:354        
-##  1st Qu.:0.000   1st Qu.:0.0000   1st Qu.:0.0000   Class :character  
-##  Median :0.000   Median :0.0000   Median :0.0000   Mode  :character  
-##  Mean   :0.339   Mean   :0.4746   Mean   :0.1864                     
-##  3rd Qu.:1.000   3rd Qu.:1.0000   3rd Qu.:0.0000                     
-##  Max.   :1.000   Max.   :1.0000   Max.   :1.0000                     
-##                                                                      
-##    compdesc              type    time2needed      time3needed      expdesc.1  
-##  Length:354         Min.   :2   Min.   : 2.000   Min.   :1.000   Min.   :1.0  
-##  Class :character   1st Qu.:2   1st Qu.: 2.000   1st Qu.:1.000   1st Qu.:1.0  
-##  Mode  :character   Median :2   Median : 2.000   Median :1.000   Median :1.0  
-##                     Mean   :2   Mean   : 2.076   Mean   :1.044   Mean   :1.2  
-##                     3rd Qu.:2   3rd Qu.: 2.000   3rd Qu.:1.000   3rd Qu.:1.0  
-##                     Max.   :2   Max.   :10.000   Max.   :2.000   Max.   :2.0  
-##                                                  NA&#39;s   :15      NA&#39;s   :339  
-##       time       estype          esdesc             esmethod    
-##  Min.   :1   Min.   : 1.000   Length:354         Min.   :1.000  
-##  1st Qu.:1   1st Qu.: 1.000   Class :character   1st Qu.:1.000  
-##  Median :2   Median : 1.000   Mode  :character   Median :2.000  
-##  Mean   :2   Mean   : 2.879                      Mean   :1.548  
-##  3rd Qu.:3   3rd Qu.: 4.000                      3rd Qu.:2.000  
-##  Max.   :3   Max.   :10.000                      Max.   :2.000  
-##              NA&#39;s   :230                         NA&#39;s   :230    
-##        es           es.se.report       es.se                n        
-##  Min.   :  0.070   Min.   :1.000   Min.   :  0.0300   Min.   :   12  
-##  1st Qu.:  0.435   1st Qu.:1.000   1st Qu.:  0.3600   1st Qu.:   74  
-##  Median :  0.930   Median :1.000   Median :  0.5550   Median :  102  
-##  Mean   :  2.427   Mean   :1.016   Mean   :  2.0344   Mean   :  889  
-##  3rd Qu.:  1.410   3rd Qu.:1.000   3rd Qu.:  0.7325   3rd Qu.:  294  
-##  Max.   :102.000   Max.   :2.000   Max.   :163.0000   Max.   :24211  
-##  NA&#39;s   :231       NA&#39;s   :230     NA&#39;s   :242        NA&#39;s   :233    
-##     expevent       expnonevent        compevent       compnonevent    
-##  Min.   :   0.0   Min.   :   2.00   Min.   :   0.0   Min.   :    0.0  
-##  1st Qu.:   6.0   1st Qu.:  15.50   1st Qu.:   7.0   1st Qu.:   11.0  
-##  Median :  14.0   Median :  28.00   Median :  12.0   Median :   22.0  
-##  Mean   :  85.3   Mean   : 220.29   Mean   : 109.1   Mean   :  450.5  
-##  3rd Qu.:  31.0   3rd Qu.:  56.25   3rd Qu.:  29.0   3rd Qu.:   37.0  
-##  Max.   :3178.0   Max.   :8296.00   Max.   :3444.0   Max.   :12080.0  
-##  NA&#39;s   :260      NA&#39;s   :262       NA&#39;s   :265      NA&#39;s   :265      
-##     outage                id           comparison   
-##  Length:354         Min.   :  2.00   Min.   :1.000  
-##  Class :character   1st Qu.: 42.00   1st Qu.:1.000  
-##  Mode  :character   Median : 75.00   Median :1.000  
-##                     Mean   : 73.33   Mean   :1.492  
-##                     3rd Qu.:114.00   3rd Qu.:2.000  
-##                     Max.   :125.00   Max.   :3.000  
-## </code></pre>
+## Model: log(es) ~ 1 
+## 
+## Number of studies = 60 
+## Number of outcomes = 112 (min = 1 , mean = 1.87 , median = 2 , max = 9 )
+## Rho = 0.8 
+## I.sq = 78.89052 
+## Tau.sq = 0.3783315 
+## 
+##                Estimate StdErr t-value  dfs P(|t|&gt;) 95% CI.L 95% CI.U Sig
+## 1 X.Intercept.   -0.268  0.119   -2.26 51.6  0.0283   -0.506  -0.0296  **
+## ---
+## Signif. codes: &lt; .01 *** &lt; .05 ** &lt; .10 *
+## ---
+## Note: If df &lt; 4, do not trust the results</code></pre>
+<p>Anti-log the estimate and confidence intervals to get odds ratios</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>( model1.eff <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">OddsRatioEstimate=</span><span class="fu">round</span>( <span class="fu">exp</span>( m1<span class="sc">$</span>reg_table<span class="sc">$</span>b.r ), <span class="at">digits =</span> <span class="dv">2</span> ), </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">LCI=</span><span class="fu">round</span>( <span class="fu">exp</span>( m1<span class="sc">$</span>reg_table<span class="sc">$</span>CI.L ), <span class="at">digits =</span> <span class="dv">2</span> ),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">UCI=</span><span class="fu">round</span>( <span class="fu">exp</span>( m1<span class="sc">$</span>reg_table<span class="sc">$</span>CI.U ), <span class="at">digits =</span> <span class="dv">2</span> ) </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                           ) </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>##   OddsRatioEstimate LCI  UCI
+## 1              0.77 0.6 0.97</code></pre>
 </div>
 
 

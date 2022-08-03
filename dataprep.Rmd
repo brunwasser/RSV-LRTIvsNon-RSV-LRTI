@@ -18,6 +18,13 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 
 # Workspace Preparation
 
+Load necessary packages
+```{r}
+require( Hmisc )
+require( rms )
+```
+
+
 Read in data file
 ```{r}
 df <- read.csv( 'WHORSVAsthmaReview_DATA_2022-07-27_0856.csv', header = T )
@@ -61,7 +68,7 @@ out1comp1.long <- reshape( out1comp1,
                            )
 
 out1comp1.long1 <- out1comp1.long[ order( out1comp1.long$record_id, out1comp1.long$time ), ]
-out1comp1.long1$comparison <- 1        
+out1comp1.long1$compid <- 1        
 
 out1comp1.long1$out1comp1expmeth___6 <- NULL
 ```
@@ -89,7 +96,7 @@ out1comp2.long <- reshape( out1comp2,
                            )
 
 out1comp2.long1 <- out1comp2.long[ order( out1comp2.long$record_id, out1comp2.long$time ), ]
-out1comp2.long1$comparison <- 2      
+out1comp2.long1$compid <- 2      
 ```
 
 Create outcome 1, comparison 3 data frame
@@ -116,7 +123,7 @@ out1comp3.long <- reshape( out1comp3,
                            )
 
 out1comp3.long1 <- out1comp3.long[ order( out1comp3.long$record_id, out1comp3.long$time ), ]
-out1comp3.long1$comparison <- 3 
+out1comp3.long1$compid <- 3 
 ```
 
 Merge all outcome 1 data frames together
@@ -138,6 +145,7 @@ colnames( out1comp3.long1 )[2:17] <- c('expdesc','expmeth___1','expmeth___2','ex
 out1varying <- rbind( out1comp1.long1, out1comp2.long1, out1comp3.long1 )
 
 out1all <- merge( out1, out1varying, by = 'record_id', all.y = T )
+out1all$outid <- 1
 ```
 
 
@@ -177,7 +185,7 @@ out2comp1.long <- reshape( out2comp1,
                            )
 
 out2comp1.long1 <- out2comp1.long[ order( out2comp1.long$record_id, out2comp1.long$time ), ]
-out2comp1.long1$comparison <- 1        
+out2comp1.long1$compid <- 1        
 
 ```
 
@@ -205,7 +213,7 @@ out2comp2.long <- reshape( out2comp2,
                            )
 
 out2comp2.long1 <- out2comp2.long[ order( out2comp2.long$record_id, out2comp2.long$time ), ]
-out2comp2.long1$comparison <- 2      
+out2comp2.long1$compid <- 2      
 ```
 
 Create outcome 1, comparison 3 data frame
@@ -232,7 +240,7 @@ out2comp3.long <- reshape( out2comp3,
                            )
 
 out2comp3.long1 <- out2comp3.long[ order( out2comp3.long$record_id, out2comp3.long$time ), ]
-out2comp3.long1$comparison <- 3 
+out2comp3.long1$compid <- 3 
 ```
 
 Merge all outcome 1 data frames together
@@ -254,6 +262,7 @@ colnames( out2comp3.long1 )[2:17] <- c('expdesc','expmeth___1','expmeth___2','ex
 out2varying <- rbind( out2comp1.long1, out2comp2.long1, out2comp3.long1 )
 
 out2all <- merge( out2, out2varying, by = 'record_id', all.y = T )
+out2all$outid <- 2
 ```
 
 
@@ -295,7 +304,7 @@ out3comp1.long <- reshape( out3comp1,
                            )
 
 out3comp1.long1 <- out3comp1.long[ order( out3comp1.long$record_id, out3comp1.long$time ), ]
-out3comp1.long1$comparison <- 1        
+out3comp1.long1$compid <- 1        
 
 ```
 
@@ -323,7 +332,7 @@ out3comp2.long <- reshape( out3comp2,
                            )
 
 out3comp2.long1 <- out3comp2.long[ order( out3comp2.long$record_id, out3comp2.long$time ), ]
-out3comp2.long1$comparison <- 2      
+out3comp2.long1$compid <- 2      
 ```
 
 Create outcome 1, comparison 3 data frame
@@ -350,7 +359,7 @@ out3comp3.long <- reshape( out3comp3,
                            )
 
 out3comp3.long1 <- out3comp3.long[ order( out3comp3.long$record_id, out3comp3.long$time ), ]
-out3comp3.long1$comparison <- 3 
+out3comp3.long1$compid <- 3 
 ```
 
 Merge all outcome 1 data frames together
@@ -372,6 +381,7 @@ colnames( out3comp3.long1 )[2:17] <- c('expdesc','expmeth___1','expmeth___2','ex
 out3varying <- rbind( out3comp1.long1, out3comp2.long1, out3comp3.long1 )
 
 out3all <- merge( out3, out3varying, by = 'record_id', all.y = T )
+out3all$outid <- 3
 ```
 
 
@@ -399,7 +409,46 @@ dfall <- rbind( out1all, out2all, out3all )
 
 dfall[ dfall == -999 ] <- NA
 
-#save( dfall, file = 'dfall.RData' )
 ```
+
+
+Create a subset of the data frame containing only comparisons between RSV+ and RSV- LRTI. 
+```{r}
+dfsub <- subset( dfall, type == 2 )
+```
+
+
+# Data inspection & cleaning
+
+Look at a summaries of the variables in the data set
+```{r}
+summary( dfsub )
+
+html( describe( dfsub[, c('estype','es','es.se')] ) )
+
+```
+
+<br>
+
+There are some suspicious effect estimates that seem unusually large or small -- could be due to a small sample size but need to inspect. Particularly, record_id 118 has an OR = 102. Based on the event/non-event rates, this appears to be due to a misplaced decimal, so it should be 1.02. Also, there was an infeasibly large standard error for record_id 133 (se = 163). When I recalculated it based on the adjustement estimate and 95% CI, I got 0.37, which was consistent with the SE for the other estimates reported in this study.  I made these change in the data frames, but this should also be changes in REDCap to avoid future problems. The smallest ES was 0.07, but this looks legit based on the event/non-event frequencies provided. We might want to do a more global quality assurance check. 
+```{r}
+dfsub[ which( dfsub$es==102 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
+dfsub[ which( dfsub$record_id == 118 ), 'es']
+
+dfall$es[ which( dfall$record_id == 118 & dfall$es == 102 ) ] <- 1.02
+dfsub$es[ which( dfsub$record_id == 118 & dfsub$es == 102 ) ] <- 1.02
+
+
+dfsub[ which( dfsub$es==.07 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
+dfsub[ which( dfsub$es==30.12 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
+
+
+dfsub[ which( dfsub$es.se == 163 ), c( 'record_id','es', 'esmethod','es.se' ) ]
+dfsub$es.se[ which( dfsub$record_id == 113 & dfsub$es.se == 163 ) ] <- .37
+
+# save( dfall, file = 'dfall.RData' )
+# save( dfsub, file = 'dfsub.RData' )
+```
+
 
 
