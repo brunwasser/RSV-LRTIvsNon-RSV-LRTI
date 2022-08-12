@@ -34,36 +34,47 @@ Load the data frame
 load( 'dfsub.RData' )
 ```
 
+<br>
 
 # Descriptives
 
+Look at the descriptive statistics for the key modeling variables
+```{r}
+dfsub1 <- dfsub[, c('es','es.se','exp.012','mingen','hosp' ) ]
+dfsub1$loges <- log( dfsub1$es )
+label( dfsub1$loges ) <- 'Effect estimate on log scale'
+label( dfsub1$es ) <- 'Effect estimate on linear scale'
+label( dfsub1$es.se ) <- 'Standard error of log effect estimate'
+html( describe( dfsub1 ) )
+```
+
+<br<
+
+Plot the effect estimates on the log scale
 ```{r}
 dfsub$w <- 1/dfsub$es.se
 qqplot <- ggplot( dfsub, aes( sample = log( es ) ) ) +
-  stat_qq( ) +
+  stat_qq(  ) +
   stat_qq_line( )
 qqplot
 ```
 
-
-```{r}
-dfsub <- dfsub[ order( dfsub$record_id, dfsub$outid, dfsub$compid, dfsub$time ), ]
-```
-
+<br>
 
 # Analyses
 
-Run an intercept-only model, providing just a marginal and unadjusted mean effect size.
+## Marginal model
+Run an intercept-only model, providing just a marginal weighted mean effect size.
 ```{r}
 m1 <- robu( log( es ) ~ 1, 
             studynum = record_id, 
             var.eff.size = es.se^2,
             data = dfsub,
             modelweights = 'CORR',
-            small = T
+            small = T,
+            rho=.8
             )
 print( m1 )
-
 ```
 
 
@@ -75,4 +86,58 @@ Anti-log the estimate and confidence intervals to get odds ratios
                            ) 
   )
 ```
+
+Marginal weighted mean effect estimates ($OR_+$) compatible with our data range from 0.58 (lower bound 95% CI) to 0.90 (upper bound 95% CI) with a point estimate of $OR_+=0.72$. Having an RSV LRTI relative to non-RSV LRTI is associated with a 10-42% reduction in odds for subsequent wheezing illness. An increase in the odds of subsequent wheezing illness with RSV LRTI vs. non-RSV LRTI is not compatible with our data with $\alpha=.05$. 
+
+<br>
+
+Conduct a sensitivity analysis to see if selection of values of $\rho$ (an estimate of the within study correlation among effect sizes) alters the results in any meaningful way. (Specification of a value for $\rho$ is needed to calculate efficient weights.)
+
+```{r}
+sensitivity( m1 )
+```
+We see that the value of $\rho$, whether it is 0 or 1, makes no meaningful difference in estimates of coefficients, standard errors, or $\tau^2$.
+
+<br>
+
+# Adjusted model
+
+Add predictors coding whether studies limited exposure ascertainment to the first year of life (**exp.012**), adjusted for genetic confounding (**mingen**), and whether hospitalization/emergency care was required for LRTI exposure (**hosp**). The intercept of this model is the weighed mean effect size when all covariates are held at their reference values representing the modal (most common) level. 
+
+```{r}
+m2 <- robu( log( es ) ~ exp.012 + mingen + relevel( hosp, ref = 'Emergency/Hospitalization Required'), 
+            studynum = record_id, 
+            var.eff.size = es.se^2,
+            data = dfsub,
+            modelweights = 'CORR',
+            small = T
+            )
+print( m2 )
+
+```
+
+
+```{r}
+( model2.eff <- data.frame( OddsRatioEstimate=round( exp( m2$reg_table$b.r ), digits = 2 ), 
+                           LCI=round( exp( m2$reg_table$CI.L ), digits = 2 ),
+                           UCI=round( exp( m2$reg_table$CI.U ), digits = 2 ),
+                           Predictor=c('Intercept','Exposure Period','Genetic Adjustment','Emergency/Hospitalization')
+                           ) 
+  )
+```
+
+The adjusted weighted mean odds ratio, holding all covariates at their modal levels, was $OR_+=0.60$ with values from 0.45 to 0.81 compatible with our data. There is insufficient evidence that any of the covariates modify the effects of RSV LRTI vs non-RSV LRTI on subsequent wheezing illness. 
+`
+<br>
+
+Again, we see from the sensitivity analysis below that the value of $\rho$ provided in the analysis makes no practical difference.
+
+
+```{r}
+sensitivity( m2 )
+```
+```
+
+
+
 

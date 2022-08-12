@@ -11,7 +11,7 @@
 
 <meta name="author" content="Steve Brunwasser" />
 
-<meta name="date" content="2022-08-03" />
+<meta name="date" content="2022-08-12" />
 
 <title>Analyses</title>
 
@@ -449,7 +449,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Analyses</h1>
 <h4 class="author">Steve Brunwasser</h4>
-<h4 class="date">2022-08-03</h4>
+<h4 class="date">2022-08-12</h4>
 
 </div>
 
@@ -463,41 +463,246 @@ div.tocify {
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( ggplot2 )</span></code></pre></div>
 <p>Load the data frame</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>( <span class="st">&#39;dfsub.RData&#39;</span> )</span></code></pre></div>
+<p><br></p>
 </div>
 <div id="descriptives" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Descriptives</h1>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dfsub<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>dfsub<span class="sc">$</span>es.se</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>qqplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( dfsub, <span class="fu">aes</span>( <span class="at">sample =</span> <span class="fu">log</span>( es ) ) ) <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>( ) <span class="sc">+</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>( )</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>qqplot</span></code></pre></div>
-<p><img src="analyses_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dfsub <span class="ot">&lt;-</span> dfsub[ <span class="fu">order</span>( dfsub<span class="sc">$</span>record_id, dfsub<span class="sc">$</span>outid, dfsub<span class="sc">$</span>compid, dfsub<span class="sc">$</span>time ), ]</span></code></pre></div>
+<p>Look at the descriptive statistics for the key modeling variables</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dfsub1 <span class="ot">&lt;-</span> dfsub[, <span class="fu">c</span>(<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;exp.012&#39;</span>,<span class="st">&#39;mingen&#39;</span>,<span class="st">&#39;hosp&#39;</span> ) ]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dfsub1<span class="sc">$</span>loges <span class="ot">&lt;-</span> <span class="fu">log</span>( dfsub1<span class="sc">$</span>es )</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">label</span>( dfsub1<span class="sc">$</span>loges ) <span class="ot">&lt;-</span> <span class="st">&#39;Effect estimate on log scale&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">label</span>( dfsub1<span class="sc">$</span>es ) <span class="ot">&lt;-</span> <span class="st">&#39;Effect estimate on linear scale&#39;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">label</span>( dfsub1<span class="sc">$</span>es.se ) <span class="ot">&lt;-</span> <span class="st">&#39;Standard error of log effect estimate&#39;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span>( <span class="fu">describe</span>( dfsub1 ) )</span></code></pre></div>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<script type="text/javascript">
+<!--
+    function expand_collapse(id) {
+       var e = document.getElementById(id);
+       var f = document.getElementById(id+"_earrows");
+       if(e.style.display == 'none'){
+          e.style.display = 'block';
+          f.innerHTML = '&#9650';
+       }
+       else {
+          e.style.display = 'none';
+          f.innerHTML = '&#9660';
+       }
+    }
+//-->
+</script>
+<style>
+.earrows {color:silver;font-size:11px;}
+
+fcap {
+ font-family: Verdana;
+ font-size: 12px;
+ color: MidnightBlue
+ }
+
+smg {
+ font-family: Verdana;
+ font-size: 10px;
+ color: &#808080;
+}
+
+hr.thinhr { margin-top: 0.15em; margin-bottom: 0.15em; }
+
+span.xscript {
+position: relative;
+}
+span.xscript sub {
+position: absolute;
+left: 0.1em;
+bottom: -1ex;
+}
+</style>
+ <font color="MidnightBlue"><div align=center><span style="font-weight:bold">dfsub1 <br><br> 6  Variables   342  Observations</span></div></font> <hr class="thinhr"> <span style="font-weight:bold">es</span>: Effect estimate on linear scale<div style='float: right; text-align: right;'><img src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAJQAAAANCAMAAAB4i7dtAAAACVBMVEUAAADMzMz////1iUV5AAAAW0lEQVQ4je2VwQoAEBAF3+7/fzSLUCgHhzmYi3LYhppWllHGQMjdwylODF/qli5F8mJKWY0PFSDzpxwuFVoINaqUNtTbVfHg/O4pZZJGfDNtHy5FHhJ9V26ZlACljgxTJGTc6wAAAABJRU5ErkJggg==" alt="image" /></div> <style>
+ .hmisctable105148 {
+ border: none;
+ font-size: 85%;
+ }
+ .hmisctable105148 td {
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable105148 th {
+ color: MidnightBlue;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: normal;
+ }
+ </style>
+ <table class="hmisctable105148">
+ <tr><th>n</th><th>missing</th><th>distinct</th><th>Info</th><th>Mean</th><th>Gmd</th><th>.05</th><th>.10</th><th>.25</th><th>.50</th><th>.75</th><th>.90</th><th>.95</th></tr>
+ <tr><td>119</td><td>223</td><td>91</td><td>1</td><td>1.549</td><td>1.802</td><td>0.179</td><td>0.248</td><td>0.435</td><td>0.930</td><td>1.395</td><td>2.688</td><td>4.735</td></tr>
+ </table>
+ <span style="font-size: 85%;"><font color="MidnightBlue">lowest</font> :  0.07  0.12  0.13  0.15  0.17 ,  <font color="MidnightBlue">highest</font>:  5.14  5.77  9.35 14.40 30.12</span> <hr class="thinhr"> <span style="font-weight:bold">es.se</span>: Standard error of log effect estimate<div style='float: right; text-align: right;'><img src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAJcAAAANCAMAAACTvAxuAAAACVBMVEUAAADMzMz////1iUV5AAAAkklEQVQ4je2T4QqAIAyEz97/oSN3baucYpj0w4PQbZKfB4cUCIgmU4QtEMLJFL3n+hZ8cfWpzuXvZkP7AAsOx3KGqct59KFkQ/vCZcOxAfaPlPerL4cF9tGfU+qX2OQ3Ba+rzhTPLa5uLmXQO4O1Jcel9YMSdw6ruZPzf+VisJL7fwrWli6phc+qSzbuubWau7zsIaIKJ2GIYUcAAAAASUVORK5CYII=" alt="image" /></div> <style>
+ .hmisctable876606 {
+ border: none;
+ font-size: 74%;
+ }
+ .hmisctable876606 td {
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable876606 th {
+ color: MidnightBlue;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: normal;
+ }
+ </style>
+ <table class="hmisctable876606">
+ <tr><th>n</th><th>missing</th><th>distinct</th><th>Info</th><th>Mean</th><th>Gmd</th><th>.05</th><th>.10</th><th>.25</th><th>.50</th><th>.75</th><th>.90</th><th>.95</th></tr>
+ <tr><td>118</td><td>224</td><td>71</td><td>1</td><td>0.5666</td><td>0.36</td><td>0.1270</td><td>0.1740</td><td>0.3225</td><td>0.5350</td><td>0.7075</td><td>0.9760</td><td>1.1950</td></tr>
+ </table>
+ <span style="font-size: 85%;"><font color="MidnightBlue">lowest</font> : 0.03 0.04 0.06 0.09 0.10 ,  <font color="MidnightBlue">highest</font>: 1.28 1.30 1.48 1.59 1.67</span> <hr class="thinhr"> <span style="font-weight:bold">exp.012</span>: LRTI Exposure Ascertainment Window <style>
+ .hmisctable307177 {
+ border: none;
+ font-size: 85%;
+ }
+ .hmisctable307177 td {
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable307177 th {
+ color: MidnightBlue;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: normal;
+ }
+ </style>
+ <table class="hmisctable307177">
+ <tr><th>n</th><th>missing</th><th>distinct</th></tr>
+ <tr><td>342</td><td>0</td><td>2</td></tr>
+ </table>
+ <pre style="font-size:85%;">
+ Value      Not limited to first year of life     Limited to first year of life
+ Frequency                                222                               120
+ Proportion                             0.649                             0.351
+ </pre>
+ <hr class="thinhr"> <span style="font-weight:bold">mingen</span>: Estimate Adjusted for Potential Genetic Confounding? <style>
+ .hmisctable938212 {
+ border: none;
+ font-size: 85%;
+ }
+ .hmisctable938212 td {
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable938212 th {
+ color: MidnightBlue;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: normal;
+ }
+ </style>
+ <table class="hmisctable938212">
+ <tr><th>n</th><th>missing</th><th>distinct</th></tr>
+ <tr><td>342</td><td>0</td><td>2</td></tr>
+ </table>
+ <pre style="font-size:85%;">
+ Value      No adjustment    Adjustment
+ Frequency            285            57
+ Proportion         0.833         0.167
+ </pre>
+ <hr class="thinhr"> <span style="font-weight:bold">hosp</span>: LRTI Required Emergency Care of Hospitalization <style>
+ .hmisctable497242 {
+ border: none;
+ font-size: 85%;
+ }
+ .hmisctable497242 td {
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable497242 th {
+ color: MidnightBlue;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: normal;
+ }
+ </style>
+ <table class="hmisctable497242">
+ <tr><th>n</th><th>missing</th><th>distinct</th></tr>
+ <tr><td>342</td><td>0</td><td>2</td></tr>
+ </table>
+ <pre style="font-size:85%;">
+ Value      Emergency/Hospitalization Not Required
+ Frequency                                      63
+ Proportion                                  0.184
+                                                  
+ Value          Emergency/Hospitalization Required
+ Frequency                                     279
+ Proportion                                  0.816
+ </pre>
+ <hr class="thinhr"> <span style="font-weight:bold">loges</span>: Effect estimate on log scale<div style='float: right; text-align: right;'><img src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAJcAAAANCAMAAACTvAxuAAAACVBMVEUAAADMzMz////1iUV5AAAAjklEQVQ4je1TMQ4AIQir/v/RF72mgrJgHBzsgAoBCrEoaQD5nHyTmgY2cvJNNlKu4WWZAHp5gmfpPl45hNrqipNpTGBi/4Ne/OB5Tq3hkH10GZgVjX3RS148z63tYl6uEptU13VGFZEgQjsqaAr3S9eb38rjleM1KailF+pLaptRJMAgQjsqSL2wbdab83yFgwpDunfKPQAAAABJRU5ErkJggg==" alt="image" /></div> <pre style="font-size:85%;">
+        n  missing distinct     Info     Mean      Gmd      .05      .10      .25 
+      119      223       91        1  -0.1752    1.102 -1.72051 -1.39446 -0.83300 
+      .50      .75      .90      .95 
+ -0.07257  0.33289  0.98878  1.55475 
+ </pre>
+ <style>
+ .hmisctable968602 {
+ border: none;
+ font-size: 85%;
+ }
+ .hmisctable968602 td {
+ text-align: right;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable968602 th {
+ color: Black;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: bold;
+ }
+ </style>
+ <table class="hmisctable968602">
+ <tr><td><font color="MidnightBlue">lowest</font> :</td><td>-2.659260</td><td>-2.120264</td><td>-2.040221</td><td>-1.897120</td><td>-1.771957</td></tr>
+ <tr><td><font color="MidnightBlue">highest</font>:</td><td> 1.637053</td><td> 1.752672</td><td> 2.235376</td><td> 2.667228</td><td> 3.405189</td></tr>
+ </table>
+ <hr class="thinhr">
+<p>&lt;br&lt;</p>
+<p>Plot the effect estimates on the log scale</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dfsub<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>dfsub<span class="sc">$</span>es.se</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>qqplot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>( dfsub, <span class="fu">aes</span>( <span class="at">sample =</span> <span class="fu">log</span>( es ) ) ) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq</span>(  ) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>( )</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>qqplot</span></code></pre></div>
+<p><img src="analyses_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><br></p>
 </div>
 <div id="analyses" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Analyses</h1>
-<p>Run an intercept-only model, providing just a marginal and unadjusted
-mean effect size.</p>
+<div id="marginal-model" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Marginal model</h2>
+<p>Run an intercept-only model, providing just a marginal weighted mean
+effect size.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">robu</span>( <span class="fu">log</span>( es ) <span class="sc">~</span> <span class="dv">1</span>, </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">studynum =</span> record_id, </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">var.eff.size =</span> es.se<span class="sc">^</span><span class="dv">2</span>,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> dfsub,</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">modelweights =</span> <span class="st">&#39;CORR&#39;</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">small =</span> T</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>( m1 )</span></code></pre></div>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">small =</span> T,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">rho=</span>.<span class="dv">8</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>( m1 )</span></code></pre></div>
 <pre><code>## RVE: Correlated Effects Model with Small-Sample Corrections 
 ## 
 ## Model: log(es) ~ 1 
 ## 
-## Number of studies = 60 
-## Number of outcomes = 112 (min = 1 , mean = 1.87 , median = 2 , max = 9 )
+## Number of studies = 58 
+## Number of outcomes = 118 (min = 1 , mean = 2.03 , median = 2 , max = 11 )
 ## Rho = 0.8 
-## I.sq = 78.89052 
-## Tau.sq = 0.3783315 
+## I.sq = 76.87278 
+## Tau.sq = 0.3519515 
 ## 
 ##                Estimate StdErr t-value  dfs P(|t|&gt;) 95% CI.L 95% CI.U Sig
-## 1 X.Intercept.   -0.268  0.119   -2.26 51.6  0.0283   -0.506  -0.0296  **
+## 1 X.Intercept.   -0.326  0.108   -3.01 49.4 0.00416   -0.544   -0.108 ***
 ## ---
 ## Signif. codes: &lt; .01 *** &lt; .05 ** &lt; .10 *
 ## ---
@@ -508,8 +713,132 @@ mean effect size.</p>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">UCI=</span><span class="fu">round</span>( <span class="fu">exp</span>( m1<span class="sc">$</span>reg_table<span class="sc">$</span>CI.U ), <span class="at">digits =</span> <span class="dv">2</span> ) </span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                           ) </span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
-<pre><code>##   OddsRatioEstimate LCI  UCI
-## 1              0.77 0.6 0.97</code></pre>
+<pre><code>##   OddsRatioEstimate  LCI UCI
+## 1              0.72 0.58 0.9</code></pre>
+<p>Marginal weighted mean effect estimates (<span
+class="math inline">\(OR_+\)</span>) compatible with our data range from
+0.58 (lower bound 95% CI) to 0.90 (upper bound 95% CI) with a point
+estimate of <span class="math inline">\(OR_+=0.72\)</span>. Having an
+RSV LRTI relative to non-RSV LRTI is associated with a 10-42% reduction
+in odds for subsequent wheezing illness. An increase in the odds of
+subsequent wheezing illness with RSV LRTI vs. non-RSV LRTI is not
+compatible with our data with <span
+class="math inline">\(\alpha=.05\)</span>.</p>
+<p><br></p>
+<p>Conduct a sensitivity analysis to see if selection of values of <span
+class="math inline">\(\rho\)</span> (an estimate of the within study
+correlation among effect sizes) alters the results in any meaningful
+way. (Specification of a value for <span
+class="math inline">\(\rho\)</span> is needed to calculate efficient
+weights.)</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sensitivity</span>( m1 )</span></code></pre></div>
+<pre><code>## RVE: Correlated Effects Model with Small-Sample Corrections 
+## Model: log(es) ~ 1 
+## 
+## Sensitivity Analysis 
+## 
+##                           Rho = 0 Rho = 0.2 Rho = 0.4 Rho = 0.6 Rho = 0.8
+##  X.Intercept. Coefficient -0.326  -0.326    -0.326    -0.326    -0.326   
+##               Std. Error   0.108   0.108     0.108     0.108     0.108   
+##  Tau.sq       Estimate     0.351   0.351     0.352     0.352     0.352   
+##  Rho = 1
+##  -0.326 
+##   0.108 
+##   0.352</code></pre>
+<p>We see that the value of <span class="math inline">\(\rho\)</span>,
+whether it is 0 or 1, makes no meaningful difference in estimates of
+coefficients, standard errors, or <span
+class="math inline">\(\tau^2\)</span>.</p>
+<p><br></p>
+</div>
+</div>
+<div id="adjusted-model" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Adjusted model</h1>
+<p>Add predictors coding whether studies limited exposure ascertainment
+to the first year of life (<strong>exp.012</strong>), adjusted for
+genetic confounding (<strong>mingen</strong>), and whether
+hospitalization/emergency care was required for LRTI exposure
+(<strong>hosp</strong>). The intercept of this model is the weighed mean
+effect size when all covariates are held at their reference values
+representing the modal (most common) level.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">robu</span>( <span class="fu">log</span>( es ) <span class="sc">~</span> exp<span class="fl">.012</span> <span class="sc">+</span> mingen <span class="sc">+</span> <span class="fu">relevel</span>( hosp, <span class="at">ref =</span> <span class="st">&#39;Emergency/Hospitalization Required&#39;</span>), </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">studynum =</span> record_id, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">var.eff.size =</span> es.se<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> dfsub,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">modelweights =</span> <span class="st">&#39;CORR&#39;</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">small =</span> T</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>( m2 )</span></code></pre></div>
+<pre><code>## RVE: Correlated Effects Model with Small-Sample Corrections 
+## 
+## Model: log(es) ~ exp.012 + mingen + relevel(hosp, ref = &quot;Emergency/Hospitalization Required&quot;) 
+## 
+## Number of studies = 58 
+## Number of outcomes = 118 (min = 1 , mean = 2.03 , median = 2 , max = 11 )
+## Rho = 0.8 
+## I.sq = 70.30966 
+## Tau.sq = 0.4441968 
+## 
+##                                                                                                  
+## 1                                                                                    X.Intercept.
+## 2                                                            exp.012Limited.to.first.year.of.life
+## 3                                                                                mingenAdjustment
+## 4 relevel.hosp..ref....Emergency.Hospitalization.Required..Emergency.Hospitalization.Not.Required
+##   Estimate StdErr t-value   dfs P(|t|&gt;) 95% CI.L 95% CI.U Sig
+## 1 -0.50528  0.147 -3.4449 32.11 0.00161   -0.804   -0.207 ***
+## 2  0.33613  0.229  1.4675 35.21 0.15111   -0.129    0.801    
+## 3 -0.00822  0.295 -0.0279 14.80 0.97813   -0.637    0.621    
+## 4  0.32518  0.338  0.9607  6.86 0.36932   -0.479    1.129    
+## ---
+## Signif. codes: &lt; .01 *** &lt; .05 ** &lt; .10 *
+## ---
+## Note: If df &lt; 4, do not trust the results</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>( model2.eff <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">OddsRatioEstimate=</span><span class="fu">round</span>( <span class="fu">exp</span>( m2<span class="sc">$</span>reg_table<span class="sc">$</span>b.r ), <span class="at">digits =</span> <span class="dv">2</span> ), </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">LCI=</span><span class="fu">round</span>( <span class="fu">exp</span>( m2<span class="sc">$</span>reg_table<span class="sc">$</span>CI.L ), <span class="at">digits =</span> <span class="dv">2</span> ),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">UCI=</span><span class="fu">round</span>( <span class="fu">exp</span>( m2<span class="sc">$</span>reg_table<span class="sc">$</span>CI.U ), <span class="at">digits =</span> <span class="dv">2</span> ),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Predictor=</span><span class="fu">c</span>(<span class="st">&#39;Intercept&#39;</span>,<span class="st">&#39;Exposure Period&#39;</span>,<span class="st">&#39;Genetic Adjustment&#39;</span>,<span class="st">&#39;Emergency/Hospitalization&#39;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                           ) </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>##   OddsRatioEstimate  LCI  UCI                 Predictor
+## 1              0.60 0.45 0.81                 Intercept
+## 2              1.40 0.88 2.23           Exposure Period
+## 3              0.99 0.53 1.86        Genetic Adjustment
+## 4              1.38 0.62 3.09 Emergency/Hospitalization</code></pre>
+<p>The adjusted weighted mean odds ratio, holding all covariates at
+their modal levels, was <span class="math inline">\(OR_+=0.60\)</span>
+with values from 0.45 to 0.81 compatible with our data. There is
+insufficient evidence that any of the covariates modify the effects of
+RSV LRTI vs non-RSV LRTI on subsequent wheezing illness. ` <br></p>
+<p>Again, we see from the sensitivity analysis below that the value of
+<span class="math inline">\(\rho\)</span> provided in the analysis makes
+no practical difference.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sensitivity</span>( m2 )</span></code></pre></div>
+<pre><code>## RVE: Correlated Effects Model with Small-Sample Corrections 
+## Model: log(es) ~ exp.012 + mingen + relevel(hosp, ref = &quot;Emergency/Hospitalization Required&quot;) 
+## 
+## Sensitivity Analysis 
+## 
+##                                                                                                 
+##  X.Intercept.                                                                                   
+##                                                                                                 
+##  exp.012Limited.to.first.year.of.life                                                           
+##                                                                                                 
+##  mingenAdjustment                                                                               
+##                                                                                                 
+##  relevel.hosp..ref....Emergency.Hospitalization.Required..Emergency.Hospitalization.Not.Required
+##                                                                                                 
+##  Tau.sq                                                                                         
+##              Rho = 0  Rho = 0.2 Rho = 0.4 Rho = 0.6 Rho = 0.8 Rho = 1 
+##  Coefficient -0.50490 -0.50500  -0.50509  -0.50519  -0.50528  -0.50538
+##  Std. Error   0.14671  0.14670   0.14669   0.14668   0.14668   0.14667
+##  Coefficient  0.33561  0.33574   0.33587   0.33600   0.33613   0.33627
+##  Std. Error   0.22898  0.22900   0.22902   0.22903   0.22905   0.22907
+##  Coefficient -0.00794 -0.00801  -0.00808  -0.00815  -0.00822  -0.00829
+##  Std. Error   0.29470  0.29471   0.29472   0.29473   0.29474   0.29474
+##  Coefficient  0.32519  0.32519   0.32518   0.32518   0.32518   0.32517
+##  Std. Error   0.33810  0.33819   0.33828   0.33837   0.33846   0.33856
+##  Estimate     0.44035  0.44131   0.44227   0.44323   0.44420   0.44516</code></pre>
+<p>```</p>
 </div>
 
 

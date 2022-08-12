@@ -448,6 +448,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">DataPrep</h1>
 <h4 class="author">Steve Brunwasser</h4>
+<h4 class="date">12-Aug-2022</h4>
 
 </div>
 
@@ -457,18 +458,26 @@ div.tocify {
 Preparation</h1>
 <p>Load necessary packages</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( Hmisc )</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( rms )</span></code></pre></div>
-<p>Read in data file</p>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( rms )</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>( robumeta )</span></code></pre></div>
+<p>Read in .csv file with the REDCap data.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>( <span class="st">&#39;WHORSVAsthmaReview_DATA_2022-07-27_0856.csv&#39;</span>, <span class="at">header =</span> T )</span></code></pre></div>
-<p>Create study-level data frame</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>study <span class="ot">&lt;-</span> df[, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">35</span>, <span class="dv">740</span><span class="sc">:</span><span class="dv">747</span> ) ]</span></code></pre></div>
+<p><br></p>
 </div>
-<div id="outcome-1-preparation" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Outcome 1
-preparation</h1>
-<p>Create outcome 1 data frame</p>
+<div id="data-prep" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Data prep</h1>
+<p>Create study-level data frame with variables with no within-cluster
+(study) variability.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>study <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span><span class="sc">:</span><span class="dv">35</span>, <span class="dv">740</span><span class="sc">:</span><span class="dv">747</span> ) ]</span></code></pre></div>
+<p><br></p>
+<div id="outcome-1-prep" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Outcome 1 prep</h2>
+<p>Create outcome 1 data frame with all variables related to outcome
+1</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>out1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">36</span><span class="sc">:</span><span class="dv">84</span> ) ]</span></code></pre></div>
-<p>Create outcome 1, comparison 1 data frame</p>
+<p><br></p>
+<p>Create outcome 1, comparison 1 data frame, reshaping all out1comp1
+variables from wide to long format.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>out1comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">85</span><span class="sc">:</span><span class="dv">137</span> ) ]</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>out1comp1<span class="sc">$</span>out1comp1expmeth___6 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
@@ -496,7 +505,9 @@ preparation</h1>
 <span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>out1comp1.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">1</span>        </span>
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>out1comp1.long1<span class="sc">$</span>out1comp1expmeth___6 <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
-<p>Create outcome 1, comparison 2 data frame</p>
+<p><br></p>
+<p>Create outcome 1, comparison 2 data frame, reshaping all out1comp2
+variables from wide to long format.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>out1comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">139</span><span class="sc">:</span><span class="dv">190</span> ) ]</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>out1comp2.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out1comp2,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">varying =</span> <span class="fu">list</span>( <span class="at">estype =</span> <span class="fu">c</span>(<span class="st">&#39;out1comp2time1estype&#39;</span>,<span class="st">&#39;out1comp2time2estype&#39;</span>,<span class="st">&#39;out1comp2time3estype&#39;</span>),</span>
@@ -519,7 +530,9 @@ preparation</h1>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>out1comp2.long1 <span class="ot">&lt;-</span> out1comp2.long[ <span class="fu">order</span>( out1comp2.long<span class="sc">$</span>record_id, out1comp2.long<span class="sc">$</span>time ), ]</span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>out1comp2.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
-<p>Create outcome 1, comparison 3 data frame</p>
+<p><br></p>
+<p>Create outcome 1, comparison 3 data frame, reshaping all out1comp3
+variables from wide to long format.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>out1comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">192</span><span class="sc">:</span><span class="dv">243</span> ) ]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>out1comp3.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out1comp3,</span>
@@ -543,6 +556,7 @@ preparation</h1>
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>out1comp3.long1 <span class="ot">&lt;-</span> out1comp3.long[ <span class="fu">order</span>( out1comp3.long<span class="sc">$</span>record_id, out1comp3.long<span class="sc">$</span>time ), ]</span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>out1comp3.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
+<p><br></p>
 <p>Merge all outcome 1 data frames together</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out1comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
@@ -563,11 +577,12 @@ preparation</h1>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>out1all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out1, out1varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>out1all<span class="sc">$</span>outid <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div>
 </div>
-<div id="outcome-2-preparation" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Outcome 2
-preparation</h1>
+<div id="outcome-2-preparation" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Outcome 2
+preparation</h2>
 <p>Create outcome 2 data frame</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>out2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">245</span><span class="sc">:</span><span class="dv">253</span>, <span class="dv">255</span><span class="sc">:</span><span class="dv">294</span> ) ]</span></code></pre></div>
+<p><br></p>
 <p>Create outcome 2, comparison 1 data frame</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>out2comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">334</span><span class="sc">:</span><span class="dv">385</span> ) ]</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -592,7 +607,8 @@ preparation</h1>
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>out2comp1.long1 <span class="ot">&lt;-</span> out2comp1.long[ <span class="fu">order</span>( out2comp1.long<span class="sc">$</span>record_id, out2comp1.long<span class="sc">$</span>time ), ]</span>
 <span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>out2comp1.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">1</span>        </span></code></pre></div>
-<p>Create outcome 1, comparison 2 data frame</p>
+<p><br></p>
+<p>Create outcome 2, comparison 2 data frame</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>out2comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">387</span><span class="sc">:</span><span class="dv">438</span> ) ]</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>out2comp2.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out2comp2,</span>
@@ -616,7 +632,8 @@ preparation</h1>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>out2comp2.long1 <span class="ot">&lt;-</span> out2comp2.long[ <span class="fu">order</span>( out2comp2.long<span class="sc">$</span>record_id, out2comp2.long<span class="sc">$</span>time ), ]</span>
 <span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>out2comp2.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
-<p>Create outcome 1, comparison 3 data frame</p>
+<p><br></p>
+<p>Create outcome 2, comparison 3 data frame</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>out2comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">440</span><span class="sc">:</span><span class="dv">491</span> ) ]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>out2comp3.long <span class="ot">&lt;-</span> <span class="fu">reshape</span>( out2comp3,</span>
@@ -640,7 +657,8 @@ preparation</h1>
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>out2comp3.long1 <span class="ot">&lt;-</span> out2comp3.long[ <span class="fu">order</span>( out2comp3.long<span class="sc">$</span>record_id, out2comp3.long<span class="sc">$</span>time ), ]</span>
 <span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>out2comp3.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
-<p>Merge all outcome 1 data frames together</p>
+<p><br></p>
+<p>Merge all outcome 2 data frames together</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out2comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;time3needed&#39;</span>)</span>
@@ -660,11 +678,13 @@ preparation</h1>
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>out2all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out2, out2varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span>
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>out2all<span class="sc">$</span>outid <span class="ot">&lt;-</span> <span class="dv">2</span></span></code></pre></div>
 </div>
-<div id="outcome-3-preparation" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Outcome 3
+</div>
+<div id="outcome-3-preparation" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Outcome 3
 preparation</h1>
 <p>Create outcome 3 data frame</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>out3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">493</span><span class="sc">:</span><span class="dv">501</span>, <span class="dv">503</span><span class="sc">:</span><span class="dv">542</span> ) ]</span></code></pre></div>
+<p><br></p>
 <p>Create outcome 3, comparison 1 data frame</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>out3comp1 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">582</span><span class="sc">:</span><span class="dv">633</span> ) ]</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -689,6 +709,7 @@ preparation</h1>
 <span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>out3comp1.long1 <span class="ot">&lt;-</span> out3comp1.long[ <span class="fu">order</span>( out3comp1.long<span class="sc">$</span>record_id, out3comp1.long<span class="sc">$</span>time ), ]</span>
 <span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>out3comp1.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">1</span>        </span></code></pre></div>
+<p><br></p>
 <p>Create outcome 3, comparison 2 data frame</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>out3comp2 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">635</span><span class="sc">:</span><span class="dv">686</span> ) ]</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -713,6 +734,7 @@ preparation</h1>
 <span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>out3comp2.long1 <span class="ot">&lt;-</span> out3comp2.long[ <span class="fu">order</span>( out3comp2.long<span class="sc">$</span>record_id, out3comp2.long<span class="sc">$</span>time ), ]</span>
 <span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>out3comp2.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">2</span>      </span></code></pre></div>
+<p><br></p>
 <p>Create outcome 1, comparison 3 data frame</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>out3comp3 <span class="ot">&lt;-</span> df[, <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">688</span><span class="sc">:</span><span class="dv">739</span> ) ]</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -737,6 +759,7 @@ preparation</h1>
 <span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>out3comp3.long1 <span class="ot">&lt;-</span> out3comp3.long[ <span class="fu">order</span>( out3comp3.long<span class="sc">$</span>record_id, out3comp3.long<span class="sc">$</span>time ), ]</span>
 <span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>out3comp3.long1<span class="sc">$</span>compid <span class="ot">&lt;-</span> <span class="dv">3</span> </span></code></pre></div>
+<p><br></p>
 <p>Merge all outcome 1 data frames together</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>( out3comp1.long1 )[<span class="dv">2</span><span class="sc">:</span><span class="dv">17</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;expdesc&#39;</span>,<span class="st">&#39;expmeth___1&#39;</span>,<span class="st">&#39;expmeth___2&#39;</span>,<span class="st">&#39;expmeth___3&#39;</span>,<span class="st">&#39;expmeth___4&#39;</span>,<span class="st">&#39;expmeth___5&#39;</span>,</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&#39;exptype&#39;</span>,<span class="st">&#39;exptime___1&#39;</span>,<span class="st">&#39;exptime___2&#39;</span>,<span class="st">&#39;exptime___3&#39;</span>,<span class="st">&#39;exptimedesc&#39;</span>,<span class="st">&#39;compdesc&#39;</span>,<span class="st">&#39;type&#39;</span>,<span class="st">&#39;time2needed&#39;</span>,</span>
@@ -756,9 +779,10 @@ preparation</h1>
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>out3all <span class="ot">&lt;-</span> <span class="fu">merge</span>( out3, out3varying, <span class="at">by =</span> <span class="st">&#39;record_id&#39;</span>, <span class="at">all.y =</span> T )</span>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>out3all<span class="sc">$</span>outid <span class="ot">&lt;-</span> <span class="dv">3</span></span></code></pre></div>
+<p><br></p>
 </div>
-<div id="combine-all-three-outcomes" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> Combine all three
+<div id="combine-all-outcomes" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Combine all
 outcomes</h1>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>vary <span class="ot">&lt;-</span> <span class="fu">setdiff</span>( <span class="fu">names</span>( out1all ), <span class="fu">names</span>( out2all ) )</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -780,103 +804,107 @@ outcomes</h1>
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>dfall <span class="ot">&lt;-</span> <span class="fu">rbind</span>( out1all, out2all, out3all )</span>
 <span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>dfall[ dfall <span class="sc">==</span> <span class="sc">-</span><span class="dv">999</span> ] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+</div>
+<div id="create-relevant" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Create relevant</h1>
 <p>Create a subset of the data frame containing only comparisons between
 RSV+ and RSV- LRTI.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dfsub <span class="ot">&lt;-</span> <span class="fu">subset</span>( dfall, type <span class="sc">==</span> <span class="dv">2</span> )</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dfsub <span class="ot">&lt;-</span> <span class="fu">subset</span>( dfall, type <span class="sc">==</span> <span class="dv">2</span> <span class="sc">&amp;</span> record_id <span class="sc">!=</span> <span class="dv">122</span> <span class="sc">&amp;</span> expmeth___4 <span class="sc">!=</span> <span class="dv">1</span> )</span></code></pre></div>
+<p><br></p>
 </div>
 <div id="data-inspection-cleaning" class="section level1" number="6">
 <h1><span class="header-section-number">6</span> Data inspection &amp;
 cleaning</h1>
 <p>Look at a summaries of the variables in the data set</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>( dfsub )</span></code></pre></div>
-<pre><code>##    record_id        outdesc               out          outprimary   
-##  Min.   :  2.00   Length:354         Min.   :1.000   Min.   :1.000  
-##  1st Qu.: 42.00   Class :character   1st Qu.:1.000   1st Qu.:1.000  
-##  Median : 75.00   Mode  :character   Median :2.000   Median :1.000  
-##  Mean   : 73.33                      Mean   :1.686   Mean   :1.653  
-##  3rd Qu.:114.00                      3rd Qu.:2.000   3rd Qu.:2.000  
-##  Max.   :125.00                      Max.   :3.000   Max.   :3.000  
+<pre><code>##    record_id       outdesc               out          outprimary       outtype 
+##  Min.   :  2.0   Length:342         Min.   :1.000   Min.   :1.000   Min.   :1  
+##  1st Qu.: 42.0   Class :character   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1  
+##  Median : 74.0   Mode  :character   Median :2.000   Median :1.000   Median :1  
+##  Mean   : 72.5                      Mean   :1.658   Mean   :1.675   Mean   :1  
+##  3rd Qu.:114.0                      3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:1  
+##  Max.   :125.0                      Max.   :3.000   Max.   :3.000   Max.   :1  
+##                                                                                
+##  outanalysis___1  outanalysis___2  outanalysis___3  outanalysis___4 
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :0.0000   Median :0.0000   Median :0.0000   Median :0.0000  
+##  Mean   :0.0614   Mean   :0.4912   Mean   :0.1316   Mean   :0.3421  
+##  3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:1.0000  
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
 ##                                                                     
-##     outtype  outanalysis___1   outanalysis___2  outanalysis___3 
-##  Min.   :1   Min.   :0.00000   Min.   :0.0000   Min.   :0.0000  
-##  1st Qu.:1   1st Qu.:0.00000   1st Qu.:0.0000   1st Qu.:0.0000  
-##  Median :1   Median :0.00000   Median :1.0000   Median :0.0000  
-##  Mean   :1   Mean   :0.05932   Mean   :0.5085   Mean   :0.1271  
-##  3rd Qu.:1   3rd Qu.:0.00000   3rd Qu.:1.0000   3rd Qu.:0.0000  
-##  Max.   :1   Max.   :1.00000   Max.   :1.0000   Max.   :1.0000  
-##                                                                 
-##  outanalysis___4  outanalysisdesc    outhowgconfound___1 outhowgconfound___2
-##  Min.   :0.0000   Length:354         Min.   :0.0000      Min.   :0.0000     
-##  1st Qu.:0.0000   Class :character   1st Qu.:0.0000      1st Qu.:0.0000     
-##  Median :0.0000   Mode  :character   Median :0.0000      Median :0.0000     
-##  Mean   :0.3305                      Mean   :0.0678      Mean   :0.2966     
-##  3rd Qu.:1.0000                      3rd Qu.:0.0000      3rd Qu.:1.0000     
-##  Max.   :1.0000                      Max.   :1.0000      Max.   :1.0000     
-##                                                                             
-##  outhowgconfound___3 outhowgconfound___4 outhowgconfound___5
-##  Min.   :0.0000      Min.   :0           Min.   :0          
-##  1st Qu.:0.0000      1st Qu.:0           1st Qu.:0          
-##  Median :0.0000      Median :0           Median :0          
-##  Mean   :0.0339      Mean   :0           Mean   :0          
-##  3rd Qu.:0.0000      3rd Qu.:0           3rd Qu.:0          
-##  Max.   :1.0000      Max.   :0           Max.   :0          
+##  outanalysisdesc    outhowgconfound___1 outhowgconfound___2 outhowgconfound___3
+##  Length:342         Min.   :0.00000     Min.   :0.0000      Min.   :0.000000   
+##  Class :character   1st Qu.:0.00000     1st Qu.:0.0000      1st Qu.:0.000000   
+##  Mode  :character   Median :0.00000     Median :0.0000      Median :0.000000   
+##                     Mean   :0.07018     Mean   :0.2982      Mean   :0.008772   
+##                     3rd Qu.:0.00000     3rd Qu.:1.0000      3rd Qu.:0.000000   
+##                     Max.   :1.00000     Max.   :1.0000      Max.   :1.000000   
+##                                                                                
+##  outhowgconfound___4 outhowgconfound___5 outhowgconfound___6
+##  Min.   :0           Min.   :0           Min.   :0.0000     
+##  1st Qu.:0           1st Qu.:0           1st Qu.:0.0000     
+##  Median :0           Median :0           Median :0.0000     
+##  Mean   :0           Mean   :0           Mean   :0.0614     
+##  3rd Qu.:0           3rd Qu.:0           3rd Qu.:0.0000     
+##  Max.   :0           Max.   :0           Max.   :1.0000     
 ##                                                             
-##  outhowgconfound___6 outhowgconfound___7 outhowgconfound___8 outhowconfounddesc
-##  Min.   :0.00000     Min.   :0.00000     Min.   :0.0000      Length:354        
-##  1st Qu.:0.00000     1st Qu.:0.00000     1st Qu.:0.0000      Class :character  
-##  Median :0.00000     Median :0.00000     Median :0.0000      Mode  :character  
-##  Mean   :0.05932     Mean   :0.01695     Mean   :0.2966                        
-##  3rd Qu.:0.00000     3rd Qu.:0.00000     3rd Qu.:1.0000                        
-##  Max.   :1.00000     Max.   :1.00000     Max.   :1.0000                        
-##                                                                                
-##  outconfdomains___1 outconfdomains___2 outconfdomains___3 outconfdomains___4
-##  Min.   :0.0000     Min.   :0.0000     Min.   :0.0000     Min.   :0.00000   
-##  1st Qu.:0.0000     1st Qu.:0.0000     1st Qu.:0.0000     1st Qu.:0.00000   
-##  Median :0.0000     Median :0.0000     Median :0.0000     Median :0.00000   
-##  Mean   :0.1949     Mean   :0.0339     Mean   :0.1186     Mean   :0.08475   
-##  3rd Qu.:0.0000     3rd Qu.:0.0000     3rd Qu.:0.0000     3rd Qu.:0.00000   
-##  Max.   :1.0000     Max.   :1.0000     Max.   :1.0000     Max.   :1.00000   
+##  outhowgconfound___7 outhowgconfound___8 outhowconfounddesc outconfdomains___1
+##  Min.   :0.00000     Min.   :0.000       Length:342         Min.   :0.0000    
+##  1st Qu.:0.00000     1st Qu.:0.000       Class :character   1st Qu.:0.0000    
+##  Median :0.00000     Median :0.000       Mode  :character   Median :0.0000    
+##  Mean   :0.01754     Mean   :0.307                          Mean   :0.1667    
+##  3rd Qu.:0.00000     3rd Qu.:1.000                          3rd Qu.:0.0000    
+##  Max.   :1.00000     Max.   :1.000                          Max.   :1.0000    
+##                                                                               
+##  outconfdomains___2 outconfdomains___3 outconfdomains___4 outconfdomains___5
+##  Min.   :0.00000    Min.   :0.0000     Min.   :0.00000    Min.   :0.0000    
+##  1st Qu.:0.00000    1st Qu.:0.0000     1st Qu.:0.00000    1st Qu.:0.0000    
+##  Median :0.00000    Median :0.0000     Median :0.00000    Median :0.0000    
+##  Mean   :0.03509    Mean   :0.1228     Mean   :0.08772    Mean   :0.2719    
+##  3rd Qu.:0.00000    3rd Qu.:0.0000     3rd Qu.:0.00000    3rd Qu.:1.0000    
+##  Max.   :1.00000    Max.   :1.0000     Max.   :1.00000    Max.   :1.0000    
 ##                                                                             
-##  outconfdomains___5 outconfdomains___6 outconfdomains___7 outconfdomains___8
-##  Min.   :0.0000     Min.   :0.000000   Min.   :0.00000    Min.   :0.00000   
-##  1st Qu.:0.0000     1st Qu.:0.000000   1st Qu.:0.00000    1st Qu.:0.00000   
-##  Median :0.0000     Median :0.000000   Median :0.00000    Median :0.00000   
-##  Mean   :0.2712     Mean   :0.008475   Mean   :0.05085    Mean   :0.08475   
-##  3rd Qu.:1.0000     3rd Qu.:0.000000   3rd Qu.:0.00000    3rd Qu.:0.00000   
-##  Max.   :1.0000     Max.   :1.000000   Max.   :1.00000    Max.   :1.00000   
+##  outconfdomains___6 outconfdomains___7 outconfdomains___8 outconfdomains___9
+##  Min.   :0          Min.   :0.00000    Min.   :0.00000    Min.   :0.00000   
+##  1st Qu.:0          1st Qu.:0.00000    1st Qu.:0.00000    1st Qu.:0.00000   
+##  Median :0          Median :0.00000    Median :0.00000    Median :0.00000   
+##  Mean   :0          Mean   :0.04386    Mean   :0.08772    Mean   :0.07895   
+##  3rd Qu.:0          3rd Qu.:0.00000    3rd Qu.:0.00000    3rd Qu.:0.00000   
+##  Max.   :0          Max.   :1.00000    Max.   :1.00000    Max.   :1.00000   
 ##                                                                             
-##  outconfdomains___9 outconfdomains___10 outconfdomains___11 outconfdomains___12
-##  Min.   :0.00000    Min.   :0.0000      Min.   :0.000000    Min.   :0          
-##  1st Qu.:0.00000    1st Qu.:0.0000      1st Qu.:0.000000    1st Qu.:0          
-##  Median :0.00000    Median :0.0000      Median :0.000000    Median :0          
-##  Mean   :0.07627    Mean   :0.0339      Mean   :0.008475    Mean   :0          
-##  3rd Qu.:0.00000    3rd Qu.:0.0000      3rd Qu.:0.000000    3rd Qu.:0          
-##  Max.   :1.00000    Max.   :1.0000      Max.   :1.000000    Max.   :0          
-##                                                                                
+##  outconfdomains___10 outconfdomains___11 outconfdomains___12
+##  Min.   :0.00000     Min.   :0.000000    Min.   :0          
+##  1st Qu.:0.00000     1st Qu.:0.000000    1st Qu.:0          
+##  Median :0.00000     Median :0.000000    Median :0          
+##  Mean   :0.03509     Mean   :0.008772    Mean   :0          
+##  3rd Qu.:0.00000     3rd Qu.:0.000000    3rd Qu.:0          
+##  Max.   :1.00000     Max.   :1.000000    Max.   :0          
+##                                                             
 ##  outconfdomains___13 outconfdomains___14 outconfdomains___15
 ##  Min.   :0.0000      Min.   :0.0000      Min.   :0          
 ##  1st Qu.:0.0000      1st Qu.:0.0000      1st Qu.:0          
 ##  Median :0.0000      Median :0.0000      Median :0          
-##  Mean   :0.1525      Mean   :0.1356      Mean   :0          
+##  Mean   :0.1579      Mean   :0.1316      Mean   :0          
 ##  3rd Qu.:0.0000      3rd Qu.:0.0000      3rd Qu.:0          
 ##  Max.   :1.0000      Max.   :1.0000      Max.   :0          
 ##                                                             
 ##  outconfdomains___16 outconfdomains___17 outmingenetics outmincoinfect
-##  Min.   :0.000       Min.   :0.0000      Min.   :1      Min.   :1.00  
-##  1st Qu.:0.000       1st Qu.:0.0000      1st Qu.:1      1st Qu.:1.00  
-##  Median :0.000       Median :0.0000      Median :1      Median :1.00  
-##  Mean   :0.161       Mean   :0.3475      Mean   :1      Mean   :1.25  
-##  3rd Qu.:0.000       3rd Qu.:1.0000      3rd Qu.:1      3rd Qu.:1.25  
-##  Max.   :1.000       Max.   :1.0000      Max.   :1      Max.   :2.00  
-##                                          NA&#39;s   :285    NA&#39;s   :342   
+##  Min.   :0.0000      Min.   :0.0000      Min.   :1      Min.   :1.00  
+##  1st Qu.:0.0000      1st Qu.:0.0000      1st Qu.:1      1st Qu.:1.00  
+##  Median :0.0000      Median :0.0000      Median :1      Median :1.00  
+##  Mean   :0.1579      Mean   :0.3596      Mean   :1      Mean   :1.25  
+##  3rd Qu.:0.0000      3rd Qu.:1.0000      3rd Qu.:1      3rd Qu.:1.25  
+##  Max.   :1.0000      Max.   :1.0000      Max.   :1      Max.   :2.00  
+##                                          NA&#39;s   :285    NA&#39;s   :330   
 ##   outminatopic   outminneonatal outminchildsex  outminantibiotic   outminses  
-##  Min.   :1.000   Min.   :1.0    Min.   :1.000   Min.   :1        Min.   :1.0  
-##  1st Qu.:1.000   1st Qu.:1.0    1st Qu.:2.000   1st Qu.:1        1st Qu.:1.0  
-##  Median :1.000   Median :1.0    Median :2.000   Median :1        Median :1.5  
-##  Mean   :1.429   Mean   :1.4    Mean   :1.938   Mean   :1        Mean   :1.5  
-##  3rd Qu.:2.000   3rd Qu.:2.0    3rd Qu.:2.000   3rd Qu.:1        3rd Qu.:2.0  
-##  Max.   :2.000   Max.   :2.0    Max.   :2.000   Max.   :1        Max.   :2.0  
-##  NA&#39;s   :312     NA&#39;s   :324    NA&#39;s   :258     NA&#39;s   :351      NA&#39;s   :336  
+##  Min.   :1.000   Min.   :1.0    Min.   :1.000   Min.   : NA      Min.   :1.0  
+##  1st Qu.:1.000   1st Qu.:1.0    1st Qu.:2.000   1st Qu.: NA      1st Qu.:1.0  
+##  Median :1.000   Median :1.0    Median :2.000   Median : NA      Median :2.0  
+##  Mean   :1.429   Mean   :1.4    Mean   :1.935   Mean   :NaN      Mean   :1.6  
+##  3rd Qu.:2.000   3rd Qu.:2.0    3rd Qu.:2.000   3rd Qu.: NA      3rd Qu.:2.0  
+##  Max.   :2.000   Max.   :2.0    Max.   :2.000   Max.   : NA      Max.   :2.0  
+##  NA&#39;s   :300     NA&#39;s   :312    NA&#39;s   :249     NA&#39;s   :342      NA&#39;s   :327  
 ##  outminsibling outminsmoking outminnutrition outminallergens outminpollution
 ##  Min.   :2     Min.   :1.0   Min.   :1.00    Min.   :1       Min.   : NA    
 ##  1st Qu.:2     1st Qu.:1.0   1st Qu.:1.00    1st Qu.:1       1st Qu.: NA    
@@ -884,70 +912,70 @@ cleaning</h1>
 ##  Mean   :2     Mean   :1.5   Mean   :1.25    Mean   :1       Mean   :NaN    
 ##  3rd Qu.:2     3rd Qu.:2.0   3rd Qu.:1.25    3rd Qu.:1       3rd Qu.: NA    
 ##  Max.   :2     Max.   :2.0   Max.   :2.00    Max.   :1       Max.   : NA    
-##  NA&#39;s   :324   NA&#39;s   :330   NA&#39;s   :342     NA&#39;s   :351     NA&#39;s   :354    
+##  NA&#39;s   :312   NA&#39;s   :318   NA&#39;s   :330     NA&#39;s   :339     NA&#39;s   :342    
 ##   outminageexp    outminageout     expdesc           expmeth___1    
-##  Min.   :1.000   Min.   :1.000   Length:354         Min.   :0.0000  
+##  Min.   :1.000   Min.   :1.000   Length:342         Min.   :0.0000  
 ##  1st Qu.:2.000   1st Qu.:2.000   Class :character   1st Qu.:1.0000  
 ##  Median :2.000   Median :2.000   Mode  :character   Median :1.0000  
-##  Mean   :1.944   Mean   :1.938                      Mean   :0.9661  
+##  Mean   :1.944   Mean   :1.933                      Mean   :0.9737  
 ##  3rd Qu.:2.000   3rd Qu.:2.000                      3rd Qu.:1.0000  
 ##  Max.   :2.000   Max.   :2.000                      Max.   :1.0000  
-##  NA&#39;s   :300     NA&#39;s   :306                                        
-##   expmeth___2      expmeth___3  expmeth___4        expmeth___5    exptype     
-##  Min.   :0.0000   Min.   :0    Min.   :0.000000   Min.   :0    Min.   :0.000  
-##  1st Qu.:0.0000   1st Qu.:0    1st Qu.:0.000000   1st Qu.:0    1st Qu.:2.000  
-##  Median :0.0000   Median :0    Median :0.000000   Median :0    Median :2.000  
-##  Mean   :0.0339   Mean   :0    Mean   :0.008475   Mean   :0    Mean   :1.709  
-##  3rd Qu.:0.0000   3rd Qu.:0    3rd Qu.:0.000000   3rd Qu.:0    3rd Qu.:2.000  
-##  Max.   :1.0000   Max.   :0    Max.   :1.000000   Max.   :0    Max.   :2.000  
-##                                                                NA&#39;s   :3      
-##   exptime___1     exptime___2      exptime___3     exptimedesc       
-##  Min.   :0.000   Min.   :0.0000   Min.   :0.0000   Length:354        
-##  1st Qu.:0.000   1st Qu.:0.0000   1st Qu.:0.0000   Class :character  
-##  Median :0.000   Median :0.0000   Median :0.0000   Mode  :character  
-##  Mean   :0.339   Mean   :0.4746   Mean   :0.1864                     
-##  3rd Qu.:1.000   3rd Qu.:1.0000   3rd Qu.:0.0000                     
-##  Max.   :1.000   Max.   :1.0000   Max.   :1.0000                     
-##                                                                      
-##    compdesc              type    time2needed      time3needed      expdesc.1  
-##  Length:354         Min.   :2   Min.   : 2.000   Min.   :1.000   Min.   :1.0  
-##  Class :character   1st Qu.:2   1st Qu.: 2.000   1st Qu.:1.000   1st Qu.:1.0  
-##  Mode  :character   Median :2   Median : 2.000   Median :1.000   Median :1.0  
-##                     Mean   :2   Mean   : 2.076   Mean   :1.044   Mean   :1.2  
-##                     3rd Qu.:2   3rd Qu.: 2.000   3rd Qu.:1.000   3rd Qu.:1.0  
-##                     Max.   :2   Max.   :10.000   Max.   :2.000   Max.   :2.0  
-##                                                  NA&#39;s   :15      NA&#39;s   :339  
+##  NA&#39;s   :288     NA&#39;s   :297                                        
+##   expmeth___2       expmeth___3  expmeth___4  expmeth___5    exptype     
+##  Min.   :0.00000   Min.   :0    Min.   :0    Min.   :0    Min.   :0.000  
+##  1st Qu.:0.00000   1st Qu.:0    1st Qu.:0    1st Qu.:0    1st Qu.:2.000  
+##  Median :0.00000   Median :0    Median :0    Median :0    Median :2.000  
+##  Mean   :0.03509   Mean   :0    Mean   :0    Mean   :0    Mean   :1.708  
+##  3rd Qu.:0.00000   3rd Qu.:0    3rd Qu.:0    3rd Qu.:0    3rd Qu.:2.000  
+##  Max.   :1.00000   Max.   :0    Max.   :0    Max.   :0    Max.   :2.000  
+##                                                           NA&#39;s   :3      
+##   exptime___1      exptime___2      exptime___3     exptimedesc       
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Length:342        
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   Class :character  
+##  Median :0.0000   Median :0.0000   Median :0.0000   Mode  :character  
+##  Mean   :0.3509   Mean   :0.4825   Mean   :0.1667                     
+##  3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.0000                     
+##  Max.   :1.0000   Max.   :1.0000   Max.   :1.0000                     
+##                                                                       
+##    compdesc              type    time2needed     time3needed      expdesc.1  
+##  Length:342         Min.   :2   Min.   :2.000   Min.   :1.000   Min.   :1.0  
+##  Class :character   1st Qu.:2   1st Qu.:2.000   1st Qu.:1.000   1st Qu.:1.0  
+##  Mode  :character   Median :2   Median :2.000   Median :1.000   Median :1.0  
+##                     Mean   :2   Mean   :2.009   Mean   :1.045   Mean   :1.2  
+##                     3rd Qu.:2   3rd Qu.:2.000   3rd Qu.:1.000   3rd Qu.:1.0  
+##                     Max.   :2   Max.   :3.000   Max.   :2.000   Max.   :2.0  
+##                                                 NA&#39;s   :12      NA&#39;s   :327  
 ##       time       estype          esdesc             esmethod    
-##  Min.   :1   Min.   : 1.000   Length:354         Min.   :1.000  
+##  Min.   :1   Min.   : 1.000   Length:342         Min.   :1.000  
 ##  1st Qu.:1   1st Qu.: 1.000   Class :character   1st Qu.:1.000  
 ##  Median :2   Median : 1.000   Mode  :character   Median :2.000  
-##  Mean   :2   Mean   : 2.879                      Mean   :1.548  
+##  Mean   :2   Mean   : 2.942                      Mean   :1.542  
 ##  3rd Qu.:3   3rd Qu.: 4.000                      3rd Qu.:2.000  
 ##  Max.   :3   Max.   :10.000                      Max.   :2.000  
-##              NA&#39;s   :230                         NA&#39;s   :230    
-##        es           es.se.report       es.se                n        
-##  Min.   :  0.070   Min.   :1.000   Min.   :  0.0300   Min.   :   12  
-##  1st Qu.:  0.435   1st Qu.:1.000   1st Qu.:  0.3600   1st Qu.:   74  
-##  Median :  0.930   Median :1.000   Median :  0.5550   Median :  102  
-##  Mean   :  2.427   Mean   :1.016   Mean   :  2.0344   Mean   :  889  
-##  3rd Qu.:  1.410   3rd Qu.:1.000   3rd Qu.:  0.7325   3rd Qu.:  294  
-##  Max.   :102.000   Max.   :2.000   Max.   :163.0000   Max.   :24211  
-##  NA&#39;s   :231       NA&#39;s   :230     NA&#39;s   :242        NA&#39;s   :233    
-##     expevent       expnonevent        compevent       compnonevent    
-##  Min.   :   0.0   Min.   :   2.00   Min.   :   0.0   Min.   :    0.0  
-##  1st Qu.:   6.0   1st Qu.:  15.50   1st Qu.:   7.0   1st Qu.:   11.0  
-##  Median :  14.0   Median :  28.00   Median :  12.0   Median :   22.0  
-##  Mean   :  85.3   Mean   : 220.29   Mean   : 109.1   Mean   :  450.5  
-##  3rd Qu.:  31.0   3rd Qu.:  56.25   3rd Qu.:  29.0   3rd Qu.:   37.0  
-##  Max.   :3178.0   Max.   :8296.00   Max.   :3444.0   Max.   :12080.0  
-##  NA&#39;s   :260      NA&#39;s   :262       NA&#39;s   :265      NA&#39;s   :265      
-##     outage                id             compid          outid      
-##  Length:354         Min.   :  2.00   Min.   :1.000   Min.   :1.000  
-##  Class :character   1st Qu.: 42.00   1st Qu.:1.000   1st Qu.:1.000  
-##  Mode  :character   Median : 75.00   Median :1.000   Median :1.000  
-##                     Mean   : 73.33   Mean   :1.492   Mean   :1.381  
-##                     3rd Qu.:114.00   3rd Qu.:2.000   3rd Qu.:2.000  
-##                     Max.   :125.00   Max.   :3.000   Max.   :3.000  
+##              NA&#39;s   :222                         NA&#39;s   :222    
+##        es          es.se.report       es.se              n          
+##  Min.   : 0.070   Min.   :1.000   Min.   :0.0300   Min.   :   12.0  
+##  1st Qu.: 0.435   1st Qu.:1.000   1st Qu.:0.3225   1st Qu.:   74.0  
+##  Median : 0.930   Median :1.000   Median :0.5350   Median :  102.0  
+##  Mean   : 1.549   Mean   :1.017   Mean   :0.5666   Mean   :  887.3  
+##  3rd Qu.: 1.395   3rd Qu.:1.000   3rd Qu.:0.7075   3rd Qu.:  294.0  
+##  Max.   :30.120   Max.   :2.000   Max.   :1.6700   Max.   :24211.0  
+##  NA&#39;s   :223      NA&#39;s   :222     NA&#39;s   :224      NA&#39;s   :225      
+##     expevent        expnonevent        compevent       compnonevent    
+##  Min.   :   0.00   Min.   :   2.00   Min.   :   0.0   Min.   :    0.0  
+##  1st Qu.:   6.00   1st Qu.:  15.50   1st Qu.:   7.0   1st Qu.:   11.0  
+##  Median :  13.00   Median :  28.00   Median :  12.0   Median :   22.0  
+##  Mean   :  86.32   Mean   : 228.69   Mean   : 102.9   Mean   :  469.2  
+##  3rd Qu.:  27.00   3rd Qu.:  57.75   3rd Qu.:  29.0   3rd Qu.:   37.0  
+##  Max.   :3178.00   Max.   :8296.00   Max.   :3444.0   Max.   :12080.0  
+##  NA&#39;s   :252       NA&#39;s   :254       NA&#39;s   :257      NA&#39;s   :257      
+##     outage                id            compid          outid      
+##  Length:342         Min.   :  2.0   Min.   :1.000   Min.   :1.000  
+##  Class :character   1st Qu.: 42.0   1st Qu.:1.000   1st Qu.:1.000  
+##  Mode  :character   Median : 74.0   Median :1.000   Median :1.000  
+##                     Mean   : 72.5   Mean   :1.482   Mean   :1.395  
+##                     3rd Qu.:114.0   3rd Qu.:2.000   3rd Qu.:2.000  
+##                     Max.   :125.0   Max.   :3.000   Max.   :3.000  
 ## </code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span>( <span class="fu">describe</span>( dfsub[, <span class="fu">c</span>(<span class="st">&#39;estype&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>)] ) )</span></code></pre></div>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
@@ -993,115 +1021,108 @@ left: 0.1em;
 bottom: -1ex;
 }
 </style>
- <font color="MidnightBlue"><div align=center><span style="font-weight:bold">dfsub[, c("estype", "es", "es.se")] <br><br> 3  Variables   354  Observations</span></div></font> <hr class="thinhr"> <span style="font-weight:bold">estype</span><div style='float: right; text-align: right;'><img src="data:image/png;base64,
+ <font color="MidnightBlue"><div align=center><span style="font-weight:bold">dfsub[, c("estype", "es", "es.se")] <br><br> 3  Variables   342  Observations</span></div></font> <hr class="thinhr"> <span style="font-weight:bold">estype</span><div style='float: right; text-align: right;'><img src="data:image/png;base64,
 iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAACVBMVEUAAADMzMz////1iUV5AAAAI0lEQVQImWNgYEQCDAxMSIB8HjlmMjCAeDARTB4DI8xcBgYAX9AA/EeX2CIAAAAASUVORK5CYII=" alt="image" /></div> <style>
- .hmisctable896300 {
+ .hmisctable659353 {
  border: none;
  font-size: 85%;
  }
- .hmisctable896300 td {
+ .hmisctable659353 td {
  text-align: center;
  padding: 0 1ex 0 1ex;
  }
- .hmisctable896300 th {
+ .hmisctable659353 th {
  color: MidnightBlue;
  text-align: center;
  padding: 0 1ex 0 1ex;
  font-weight: normal;
  }
  </style>
- <table class="hmisctable896300">
+ <table class="hmisctable659353">
  <tr><th>n</th><th>missing</th><th>distinct</th><th>Info</th><th>Mean</th><th>Gmd</th></tr>
- <tr><td>124</td><td>230</td><td>4</td><td>0.694</td><td>2.879</td><td>2.914</td></tr>
+ <tr><td>120</td><td>222</td><td>4</td><td>0.708</td><td>2.942</td><td>2.981</td></tr>
  </table>
  <pre style="font-size:85%;">
  Value          1     2     4    10
- Frequency     83     5    16    20
- Proportion 0.669 0.040 0.129 0.161
+ Frequency     79     5    16    20
+ Proportion 0.658 0.042 0.133 0.167
  </pre>
  <hr class="thinhr"> <span style="font-weight:bold">es</span><div style='float: right; text-align: right;'><img src="data:image/png;base64,
-iVBORw0KGgoAAAANSUhEUgAAAE8AAAANCAMAAADfesPTAAAACVBMVEUAAADMzMz////1iUV5AAAAOUlEQVQ4jWNgZGBgpCJgYGJgYKIiGDWPQvOA8UvNCAa5j5oOHJHmUdFAcPyCohgUy8gRTVakMzACAPmBBtZrdh69AAAAAElFTkSuQmCC" alt="image" /></div> <style>
- .hmisctable645045 {
+iVBORw0KGgoAAAANSUhEUgAAAJQAAAANCAMAAAB4i7dtAAAACVBMVEUAAADMzMz////1iUV5AAAAW0lEQVQ4je2VwQoAEBAF3+7/fzSLUCgHhzmYi3LYhppWllHGQMjdwylODF/qli5F8mJKWY0PFSDzpxwuFVoINaqUNtTbVfHg/O4pZZJGfDNtHy5FHhJ9V26ZlACljgxTJGTc6wAAAABJRU5ErkJggg==" alt="image" /></div> <style>
+ .hmisctable985098 {
  border: none;
  font-size: 85%;
  }
- .hmisctable645045 td {
+ .hmisctable985098 td {
  text-align: center;
  padding: 0 1ex 0 1ex;
  }
- .hmisctable645045 th {
+ .hmisctable985098 th {
  color: MidnightBlue;
  text-align: center;
  padding: 0 1ex 0 1ex;
  font-weight: normal;
  }
  </style>
- <table class="hmisctable645045">
+ <table class="hmisctable985098">
  <tr><th>n</th><th>missing</th><th>distinct</th><th>Info</th><th>Mean</th><th>Gmd</th><th>.05</th><th>.10</th><th>.25</th><th>.50</th><th>.75</th><th>.90</th><th>.95</th></tr>
- <tr><td>123</td><td>231</td><td>94</td><td>1</td><td>2.427</td><td>3.507</td><td>0.180</td><td>0.252</td><td>0.435</td><td>0.930</td><td>1.410</td><td>2.920</td><td>5.131</td></tr>
+ <tr><td>119</td><td>223</td><td>91</td><td>1</td><td>1.549</td><td>1.802</td><td>0.179</td><td>0.248</td><td>0.435</td><td>0.930</td><td>1.395</td><td>2.688</td><td>4.735</td></tr>
  </table>
- <span style="font-size: 85%;"><font color="MidnightBlue">lowest</font> :   0.07   0.12   0.13   0.15   0.17 ,  <font color="MidnightBlue">highest</font>:   9.35   9.92  14.40  30.12 102.00</span> <hr class="thinhr"> <span style="font-weight:bold">es.se</span><div style='float: right; text-align: right;'><img src="data:image/png;base64,
-iVBORw0KGgoAAAANSUhEUgAAABAAAAANCAMAAACXZR4WAAAACVBMVEUAAADMzMz////1iUV5AAAAF0lEQVQImWNgYEQFDAxMqIA6AgNhCwMAlRoBWdrVTHYAAAAASUVORK5CYII=" alt="image" /></div> <style>
- .hmisctable326823 {
+ <span style="font-size: 85%;"><font color="MidnightBlue">lowest</font> :  0.07  0.12  0.13  0.15  0.17 ,  <font color="MidnightBlue">highest</font>:  5.14  5.77  9.35 14.40 30.12</span> <hr class="thinhr"> <span style="font-weight:bold">es.se</span><div style='float: right; text-align: right;'><img src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAJcAAAANCAMAAACTvAxuAAAACVBMVEUAAADMzMz////1iUV5AAAAkklEQVQ4je2T4QqAIAyEz97/oSN3baucYpj0w4PQbZKfB4cUCIgmU4QtEMLJFL3n+hZ8cfWpzuXvZkP7AAsOx3KGqct59KFkQ/vCZcOxAfaPlPerL4cF9tGfU+qX2OQ3Ba+rzhTPLa5uLmXQO4O1Jcel9YMSdw6ruZPzf+VisJL7fwrWli6phc+qSzbuubWau7zsIaIKJ2GIYUcAAAAASUVORK5CYII=" alt="image" /></div> <style>
+ .hmisctable536963 {
  border: none;
  font-size: 74%;
  }
- .hmisctable326823 td {
+ .hmisctable536963 td {
  text-align: center;
  padding: 0 1ex 0 1ex;
  }
- .hmisctable326823 th {
+ .hmisctable536963 th {
  color: MidnightBlue;
  text-align: center;
  padding: 0 1ex 0 1ex;
  font-weight: normal;
  }
  </style>
- <table class="hmisctable326823">
+ <table class="hmisctable536963">
  <tr><th>n</th><th>missing</th><th>distinct</th><th>Info</th><th>Mean</th><th>Gmd</th><th>.05</th><th>.10</th><th>.25</th><th>.50</th><th>.75</th><th>.90</th><th>.95</th></tr>
- <tr><td>112</td><td>242</td><td>72</td><td>1</td><td>2.034</td><td>3.252</td><td>0.1210</td><td>0.1620</td><td>0.3600</td><td>0.5550</td><td>0.7325</td><td>0.9880</td><td>1.2890</td></tr>
+ <tr><td>118</td><td>224</td><td>71</td><td>1</td><td>0.5666</td><td>0.36</td><td>0.1270</td><td>0.1740</td><td>0.3225</td><td>0.5350</td><td>0.7075</td><td>0.9760</td><td>1.1950</td></tr>
  </table>
- <span style="font-size: 85%;"><font color="MidnightBlue">lowest</font> :   0.03   0.04   0.06   0.09   0.10 ,  <font color="MidnightBlue">highest</font>:   1.30   1.48   1.59   1.67 163.00</span> <pre style="font-size:85%;">
- Value        0.0   0.5   1.0   1.5 163.0
- Frequency     15    70    20     6     1
- Proportion 0.134 0.625 0.179 0.054 0.009
- </pre>
-  For the frequency table, variable is rounded to the nearest 0.5 <hr class="thinhr">
+ <span style="font-size: 85%;"><font color="MidnightBlue">lowest</font> : 0.03 0.04 0.06 0.09 0.10 ,  <font color="MidnightBlue">highest</font>: 1.28 1.30 1.48 1.59 1.67</span> <hr class="thinhr">
 <p><br></p>
+<p><strong>Problems described below resolved both in REDCAp database and
+in .csv file imported in for analysis (12-Aug-2022)</strong></p>
 <p>There are some suspicious effect estimates that seem unusually large
 or small – could be due to a small sample size but need to inspect.
 Particularly, record_id 118 has an OR = 102. Based on the
 event/non-event rates, this appears to be due to a misplaced decimal, so
 it should be 1.02. Also, there was an infeasibly large standard error
 for record_id 133 (se = 163). When I recalculated it based on the
-adjustement estimate and 95% CI, I got 0.37, which was consistent with
+adjustment estimate and 95% CI, I got 0.37, which was consistent with
 the SE for the other estimates reported in this study. I made these
 change in the data frames, but this should also be changes in REDCap to
 avoid future problems. The smallest ES was 0.07, but this looks legit
 based on the event/non-event frequencies provided. We might want to do a
 more global quality assurance check.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>es<span class="sc">==</span><span class="dv">102</span> ), <span class="fu">c</span>(<span class="st">&#39;record_id&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>) ]</span></code></pre></div>
-<pre><code>##      record_id  es es.se   n expevent expnonevent compevent compnonevent
-## 1054       118 102  0.25 294      107         112        45           48</code></pre>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>record_id <span class="sc">==</span> <span class="dv">118</span> ), <span class="st">&#39;es&#39;</span>]</span></code></pre></div>
-<pre><code>## [1] 102.00     NA   0.93     NA   1.27     NA     NA     NA     NA</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>dfall<span class="sc">$</span>es[ <span class="fu">which</span>( dfall<span class="sc">$</span>record_id <span class="sc">==</span> <span class="dv">118</span> <span class="sc">&amp;</span> dfall<span class="sc">$</span>es <span class="sc">==</span> <span class="dv">102</span> ) ] <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>dfsub<span class="sc">$</span>es[ <span class="fu">which</span>( dfsub<span class="sc">$</span>record_id <span class="sc">==</span> <span class="dv">118</span> <span class="sc">&amp;</span> dfsub<span class="sc">$</span>es <span class="sc">==</span> <span class="dv">102</span> ) ] <span class="ot">&lt;-</span> <span class="fl">1.02</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>es<span class="sc">==</span>.<span class="dv">07</span> ), <span class="fu">c</span>(<span class="st">&#39;record_id&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>) ]</span></code></pre></div>
-<pre><code>##     record_id   es es.se   n expevent expnonevent compevent compnonevent
-## 694        78 0.07  1.02 191       16         106        43           26</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>es<span class="sc">==</span><span class="fl">30.12</span> ), <span class="fu">c</span>(<span class="st">&#39;record_id&#39;</span>,<span class="st">&#39;es&#39;</span>,<span class="st">&#39;es.se&#39;</span>,<span class="st">&#39;n&#39;</span>,<span class="st">&#39;expevent&#39;</span>,<span class="st">&#39;expnonevent&#39;</span>,<span class="st">&#39;compevent&#39;</span>,<span class="st">&#39;compnonevent&#39;</span>) ]</span></code></pre></div>
-<pre><code>##     record_id    es es.se  n expevent expnonevent compevent compnonevent
-## 408        46 30.12  1.48 61       32          20         0            9</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dfsub[ <span class="fu">which</span>( dfsub<span class="sc">$</span>es.se <span class="sc">==</span> <span class="dv">163</span> ), <span class="fu">c</span>( <span class="st">&#39;record_id&#39;</span>,<span class="st">&#39;es&#39;</span>, <span class="st">&#39;esmethod&#39;</span>,<span class="st">&#39;es.se&#39;</span> ) ]</span></code></pre></div>
-<pre><code>##      record_id   es esmethod es.se
-## 2141       113 1.02        1   163</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>dfsub<span class="sc">$</span>es.se[ <span class="fu">which</span>( dfsub<span class="sc">$</span>record_id <span class="sc">==</span> <span class="dv">113</span> <span class="sc">&amp;</span> dfsub<span class="sc">$</span>es.se <span class="sc">==</span> <span class="dv">163</span> ) ] <span class="ot">&lt;-</span> .<span class="dv">37</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># save( dfall, file = &#39;dfall.RData&#39; )</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># save( dfsub, file = &#39;dfsub.RData&#39; )</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dfsub[ which( dfsub$es==102 ), c(&#39;record_id&#39;,&#39;es&#39;,&#39;es.se&#39;,&#39;n&#39;,&#39;expevent&#39;,&#39;expnonevent&#39;,&#39;compevent&#39;,&#39;compnonevent&#39;) ]</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dfsub[ which( dfsub$record_id == 118 ), &#39;es&#39;]</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># dfall$es[ which( dfall$record_id == 118 &amp; dfall$es == 102 ) ] &lt;- 1.02</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># dfsub$es[ which( dfsub$record_id == 118 &amp; dfsub$es == 102 ) ] &lt;- 1.02</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># dfsub[ which( dfsub$es==.07 ), c(&#39;record_id&#39;,&#39;es&#39;,&#39;es.se&#39;,&#39;n&#39;,&#39;expevent&#39;,&#39;expnonevent&#39;,&#39;compevent&#39;,&#39;compnonevent&#39;) ]</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co"># dfsub[ which( dfsub$es==30.12 ), c(&#39;record_id&#39;,&#39;es&#39;,&#39;es.se&#39;,&#39;n&#39;,&#39;expevent&#39;,&#39;expnonevent&#39;,&#39;compevent&#39;,&#39;compnonevent&#39;) ]</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co"># dfsub[ which( dfsub$es.se == 163 ), c( &#39;record_id&#39;,&#39;es&#39;, &#39;esmethod&#39;,&#39;es.se&#39; ) ]</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># dfsub$es.se[ which( dfsub$record_id == 113 &amp; dfsub$es.se == 163 ) ] &lt;- .37</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>( dfall, <span class="at">file =</span> <span class="st">&#39;dfall.RData&#39;</span> )</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>( dfsub, <span class="at">file =</span> <span class="st">&#39;dfsub.RData&#39;</span> )</span></code></pre></div>
 </div>
 
 

@@ -1,6 +1,7 @@
 ---
 title: "DataPrep"
 author: "Steve Brunwasser"
+date: "`r format(Sys.time(), '%d-%b-%Y')`"
 output:
   html_document:
     toc: true
@@ -22,27 +23,36 @@ Load necessary packages
 ```{r}
 require( Hmisc )
 require( rms )
+require( robumeta )
 ```
 
 
-Read in data file
+Read in .csv file with the REDCap data.
 ```{r}
 df <- read.csv( 'WHORSVAsthmaReview_DATA_2022-07-27_0856.csv', header = T )
 ```
 
-Create study-level data frame
+<br>
+
+# Data prep
+
+Create study-level data frame with variables with no within-cluster (study) variability.
 ```{r}
-study <- df[, c(1:35, 740:747 ) ]
+study <- df[, c( 1:35, 740:747 ) ]
 ```
 
-# Outcome 1 preparation
+<br>
 
-Create outcome 1 data frame
+## Outcome 1 prep
+
+Create outcome 1 data frame with all variables related to outcome 1
 ```{r}
 out1 <- df[, c( 1, 36:84 ) ]
 ```
 
-Create outcome 1, comparison 1 data frame
+<br>
+
+Create outcome 1, comparison 1 data frame, reshaping all out1comp1 variables from wide to long format.
 ```{r}
 out1comp1 <- df[, c( 1, 85:137 ) ]
 
@@ -73,7 +83,9 @@ out1comp1.long1$compid <- 1
 out1comp1.long1$out1comp1expmeth___6 <- NULL
 ```
 
-Create outcome 1, comparison 2 data frame
+<br>
+
+Create outcome 1, comparison 2 data frame, reshaping all out1comp2 variables from wide to long format.
 ```{r}
 out1comp2 <- df[, c( 1, 139:190 ) ]
 out1comp2.long <- reshape( out1comp2,
@@ -99,7 +111,9 @@ out1comp2.long1 <- out1comp2.long[ order( out1comp2.long$record_id, out1comp2.lo
 out1comp2.long1$compid <- 2      
 ```
 
-Create outcome 1, comparison 3 data frame
+<br>
+
+Create outcome 1, comparison 3 data frame, reshaping all out1comp3 variables from wide to long format.
 ```{r}
 out1comp3 <- df[, c( 1, 192:243 ) ]
 
@@ -126,6 +140,8 @@ out1comp3.long1 <- out1comp3.long[ order( out1comp3.long$record_id, out1comp3.lo
 out1comp3.long1$compid <- 3 
 ```
 
+<br>
+
 Merge all outcome 1 data frames together
 ```{r}
 colnames( out1comp1.long1 )[2:17] <- c('expdesc','expmeth___1','expmeth___2','expmeth___3','expmeth___4','expmeth___5',
@@ -149,17 +165,14 @@ out1all$outid <- 1
 ```
 
 
-
-
-
-
-
-# Outcome 2 preparation
+## Outcome 2 preparation
 
 Create outcome 2 data frame
 ```{r}
 out2 <- df[, c( 1, 245:253, 255:294 ) ]
 ```
+
+<br>
 
 Create outcome 2, comparison 1 data frame
 ```{r}
@@ -189,7 +202,9 @@ out2comp1.long1$compid <- 1
 
 ```
 
-Create outcome 1, comparison 2 data frame
+<br>
+
+Create outcome 2, comparison 2 data frame
 ```{r}
 out2comp2 <- df[, c( 1, 387:438 ) ]
 
@@ -216,7 +231,9 @@ out2comp2.long1 <- out2comp2.long[ order( out2comp2.long$record_id, out2comp2.lo
 out2comp2.long1$compid <- 2      
 ```
 
-Create outcome 1, comparison 3 data frame
+<br>
+
+Create outcome 2, comparison 3 data frame
 ```{r}
 out2comp3 <- df[, c( 1, 440:491 ) ]
 
@@ -243,7 +260,9 @@ out2comp3.long1 <- out2comp3.long[ order( out2comp3.long$record_id, out2comp3.lo
 out2comp3.long1$compid <- 3 
 ```
 
-Merge all outcome 1 data frames together
+<br>
+
+Merge all outcome 2 data frames together
 ```{r}
 colnames( out2comp1.long1 )[2:17] <- c('expdesc','expmeth___1','expmeth___2','expmeth___3','expmeth___4','expmeth___5',
                                        'exptype','exptime___1','exptime___2','exptime___3','exptimedesc','compdesc','type','time2needed',
@@ -267,18 +286,14 @@ out2all$outid <- 2
 
 
 
-
-
-
-
-
-
 # Outcome 3 preparation
 
 Create outcome 3 data frame
 ```{r}
 out3 <- df[, c( 1, 493:501, 503:542 ) ]
 ```
+
+<br>
 
 Create outcome 3, comparison 1 data frame
 ```{r}
@@ -308,6 +323,8 @@ out3comp1.long1$compid <- 1
 
 ```
 
+<br>
+
 Create outcome 3, comparison 2 data frame
 ```{r}
 out3comp2 <- df[, c( 1, 635:686 ) ]
@@ -334,6 +351,8 @@ out3comp2.long <- reshape( out3comp2,
 out3comp2.long1 <- out3comp2.long[ order( out3comp2.long$record_id, out3comp2.long$time ), ]
 out3comp2.long1$compid <- 2      
 ```
+
+<br>
 
 Create outcome 1, comparison 3 data frame
 ```{r}
@@ -362,6 +381,8 @@ out3comp3.long1 <- out3comp3.long[ order( out3comp3.long$record_id, out3comp3.lo
 out3comp3.long1$compid <- 3 
 ```
 
+<br>
+
 Merge all outcome 1 data frames together
 ```{r}
 colnames( out3comp1.long1 )[2:17] <- c('expdesc','expmeth___1','expmeth___2','expmeth___3','expmeth___4','expmeth___5',
@@ -384,8 +405,9 @@ out3all <- merge( out3, out3varying, by = 'record_id', all.y = T )
 out3all$outid <- 3
 ```
 
+<br>
 
-# Combine all three outcomes
+# Combine all outcomes
 ```{r}
 
 vary <- setdiff( names( out1all ), names( out2all ) )
@@ -407,16 +429,20 @@ colnames(out3all)[colnames(out3all) %in% vary3 ] <- vary1
 
 dfall <- rbind( out1all, out2all, out3all )
 
+
+dfall1 <- merge( dfall, study, by = 'record_id', all.x = T, all.y = T )
+
 dfall[ dfall == -999 ] <- NA
 
 ```
 
-
-Create a subset of the data frame containing only comparisons between RSV+ and RSV- LRTI. 
+# Create relevant 
+Create a subset of the data frame containing only comparisons between RSV+ and RSV- LRTI, eliminating record_id 122 (which doesn't meet inclusion criteria), and studies that did not determine infection through lab testing. 
 ```{r}
-dfsub <- subset( dfall, type == 2 )
+dfsub <- subset( dfall1, type == 2 & record_id != 122 & expmeth___4 != 1 )
 ```
 
+<br>
 
 # Data inspection & cleaning
 
@@ -430,25 +456,52 @@ html( describe( dfsub[, c('estype','es','es.se')] ) )
 
 <br>
 
-There are some suspicious effect estimates that seem unusually large or small -- could be due to a small sample size but need to inspect. Particularly, record_id 118 has an OR = 102. Based on the event/non-event rates, this appears to be due to a misplaced decimal, so it should be 1.02. Also, there was an infeasibly large standard error for record_id 133 (se = 163). When I recalculated it based on the adjustement estimate and 95% CI, I got 0.37, which was consistent with the SE for the other estimates reported in this study.  I made these change in the data frames, but this should also be changes in REDCap to avoid future problems. The smallest ES was 0.07, but this looks legit based on the event/non-event frequencies provided. We might want to do a more global quality assurance check. 
+**Problems described below resolved both in REDCAp database and in .csv file imported in for analysis (12-Aug-2022)**
+
+There are some suspicious effect estimates that seem unusually large or small -- could be due to a small sample size but need to inspect. Particularly, record_id 118 has an OR = 102. Based on the event/non-event rates, this appears to be due to a misplaced decimal, so it should be 1.02. Also, there was an infeasibly large standard error for record_id 133 (se = 163). When I recalculated it based on the adjustment estimate and 95% CI, I got 0.37, which was consistent with the SE for the other estimates reported in this study.  I made these change in the data frames, but this should also be changes in REDCap to avoid future problems. The smallest ES was 0.07, but this looks legit based on the event/non-event frequencies provided. We might want to do a more global quality assurance check. 
 ```{r}
-dfsub[ which( dfsub$es==102 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
-dfsub[ which( dfsub$record_id == 118 ), 'es']
+# dfsub[ which( dfsub$es==102 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
+# dfsub[ which( dfsub$record_id == 118 ), 'es']
+# 
+# dfall$es[ which( dfall$record_id == 118 & dfall$es == 102 ) ] <- 1.02
+# dfsub$es[ which( dfsub$record_id == 118 & dfsub$es == 102 ) ] <- 1.02
+# 
+# 
+# dfsub[ which( dfsub$es==.07 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
+# dfsub[ which( dfsub$es==30.12 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
+# 
+# 
+# dfsub[ which( dfsub$es.se == 163 ), c( 'record_id','es', 'esmethod','es.se' ) ]
+# dfsub$es.se[ which( dfsub$record_id == 113 & dfsub$es.se == 163 ) ] <- .37
+# 
 
-dfall$es[ which( dfall$record_id == 118 & dfall$es == 102 ) ] <- 1.02
-dfsub$es[ which( dfsub$record_id == 118 & dfsub$es == 102 ) ] <- 1.02
+# 
 
-
-dfsub[ which( dfsub$es==.07 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
-dfsub[ which( dfsub$es==30.12 ), c('record_id','es','es.se','n','expevent','expnonevent','compevent','compnonevent') ]
-
-
-dfsub[ which( dfsub$es.se == 163 ), c( 'record_id','es', 'esmethod','es.se' ) ]
-dfsub$es.se[ which( dfsub$record_id == 113 & dfsub$es.se == 163 ) ] <- .37
-
-# save( dfall, file = 'dfall.RData' )
-# save( dfsub, file = 'dfsub.RData' )
 ```
 
 
+## Create derived variables
+
+```{r}
+dfsub$mingen <- NA
+dfsub$mingen[ is.na( dfsub$outmingenetics) ] <- 0 
+dfsub$mingen[ dfsub$outmingenetics == 1 ] <- 1 
+summary( dfsub$mingen <- factor( dfsub$mingen,
+                                 levels = 0:1,
+                                 labels = c('No adjustment','Adjustment'))
+         )
+label( dfsub$mingen ) <- 'Estimate Adjusted for Potential Genetic Confounding?'
+
+
+table( dfsub$exp.012 <- ifelse( dfsub$exptime___1 == 1, 1, 0 ) )
+dfsub$exp.012 <- factor( dfsub$exp.012, levels = 0:1, labels = c('Not limited to first year of life','Limited to first year of life') )
+label( dfsub$exp.012 ) <- 'LRTI Exposure Ascertainment Window'
+
+summary( dfsub$hosp <- factor( ifelse( dfsub$exptype == 2, 1, 0 ), levels = 0:1, labels = c('Emergency/Hospitalization Not Required','Emergency/Hospitalization Required') ) )
+label( dfsub$hosp ) <- 'LRTI Required Emergency Care of Hospitalization'
+
+
+# save( dfall1, file = 'dfall1.RData' )
+# save( dfsub, file = 'dfsub.RData' )
+```
 
