@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+<meta name="date" content="2022-08-28" />
+
+<title>Manuscript</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">RSV+ vs. RSV- LRTI Effect on Wheezing Illness</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">RSV+ vs RSV- LRTI</a>
+</li>
+<li>
+  <a href="analyses.html">Analyses</a>
+</li>
+<li>
+  <a href="dataprep.html">Data Prep</a>
+</li>
+<li>
+  <a href="manuscript.html">Manuscript</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Manuscript</h1>
+<h4 class="date">2022-08-28</h4>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+</div>
+<div id="method" class="section level1">
+<h1>Method</h1>
+<div id="statistical-analysis" class="section level2">
+<h2>Statistical Analysis</h2>
+<p>We used robust variance estimation (RVE) meta-analysis <span
+class="citation">(1)</span> to obtain aggregate effect estimates (<span
+class="math inline">\(OR_+\)</span>) and confidence intervals in the
+robumeta package (version 2.0; <span class="citation">(2)</span>) in R
+(version 4.2.0). The RVE approach allows for inclusion of all relevant
+estimates from each study while yielding confidence intervals for the
+weighted mean estimates that have appropriate coverage. Unlike in
+multilevel meta-analysis, the RVE approach does not require knowledge
+(or well-informed estimates) of the within-study correlations among
+effect estimates <span class="citation">(3)</span>. These within-study
+correlations are estimated crudely using cross-products of estimate
+residuals. As recommended by developers of the RVE approach, we used
+small-sample-size adjustments and Satterhwaite degrees of freedom (<span
+class="math inline">\(df\)</span>), with model estimates with <span
+class="math inline">\(df&lt;4\)</span> considered unreliable <span
+class="citation">(4)</span>. As the dependence in effect estimates was
+mainly attributable to having multiple clustered within studies, we used
+the correlated effect weights <span class="citation">(3)</span>.</p>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<p>The marginal weighted mean effect estimate (<span
+class="math inline">\(OR_+\)</span>) based on the unadjusted analysis
+showed that the data were compatible with reductions in odds of
+subsequent wheezing illness with RSV LRTI relative to non-RSV LRTI
+ranging from 10-42% with the point estimate indicative of a 28%
+reduction (<span class="math inline">\(OR_+\)</span>=0.72, 95% CI: 0.58,
+0.90 ).</p>
+<p>As shown in Table X, there was insufficient evidence (with <span
+class="math inline">\(\alpha\)</span> = .05) of effect modification by
+any of the <em>a priori</em> effect modifiers. However, there was
+considerable uncertainty in the estimates. There was a trend (<span
+class="math inline">\(\hat{\gamma}\)</span> (<em>df</em>=35.21) = 0.34.
+95% CI [-0.13, 0.80]) toward smaller effect estimates (nearer the null)
+among studies that limited exposure ascertainment to the first year of
+life (<span class="math inline">\(aOR_+\)</span> = 0.84, 95% CI: [0.55,
+1.30]) compared to those that did not (<span
+class="math inline">\(aOR_+\)</span> = 0.60, 95% CI: [0.45, 0.81]) (see
+Figure X).</p>
+<table>
+<caption>Table X. Robust Variance Estimation Adjusted Model (Estimates
+are Weighted Mean Odd Ratios)</caption>
+<colgroup>
+<col width="44%" />
+<col width="6%" />
+<col width="9%" />
+<col width="19%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Predictor</th>
+<th align="right">df</th>
+<th align="right">Estimate</th>
+<th align="right">Lower Bound 95% CI</th>
+<th align="right">Upper Bound 95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">32.11</td>
+<td align="right">0.60</td>
+<td align="right">0.45</td>
+<td align="right">0.81</td>
+</tr>
+<tr class="even">
+<td align="left">Exposure Ascertainment Period</td>
+<td align="right">35.21</td>
+<td align="right">1.40</td>
+<td align="right">0.88</td>
+<td align="right">2.23</td>
+</tr>
+<tr class="odd">
+<td align="left">Genetic Adjustment</td>
+<td align="right">14.80</td>
+<td align="right">0.99</td>
+<td align="right">0.53</td>
+<td align="right">1.86</td>
+</tr>
+<tr class="even">
+<td align="left">Emergency Care or Hospitalization Required</td>
+<td align="right">6.86</td>
+<td align="right">1.38</td>
+<td align="right">0.62</td>
+<td align="right">3.09</td>
+</tr>
+</tbody>
+</table>
+<p><img src="manuscript_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div id="refs" class="references csl-bib-body">
+<div id="ref-hedges2010robust" class="csl-entry">
+<div class="csl-left-margin">1. </div><div
+class="csl-right-inline">Hedges LV, Tipton E, Johnson MC. Robust
+variance estimation in meta-regression with dependent effect size
+estimates. Research synthesis methods. 2010;1(1):39–65. </div>
+</div>
+<div id="ref-robumeta" class="csl-entry">
+<div class="csl-left-margin">2. </div><div
+class="csl-right-inline">Fisher Z, Tipton E, Zhipeng H. Robumeta: Robust
+variance meta-regression [Internet]. 2017. Available from: <a
+href="https://CRAN.R-project.org/package=robumeta">https://CRAN.R-project.org/package=robumeta</a></div>
+</div>
+<div id="ref-tanner2016handling" class="csl-entry">
+<div class="csl-left-margin">3. </div><div
+class="csl-right-inline">Tanner-Smith EE, Tipton E, Polanin JR. Handling
+complex meta-analytic data structures using robust variance estimates: A
+tutorial in r. Journal of Developmental and Life-Course Criminology.
+2016;2(1):85–112. </div>
+</div>
+<div id="ref-tipton2015small" class="csl-entry">
+<div class="csl-left-margin">4. </div><div
+class="csl-right-inline">Tipton E, Pustejovsky JE. Small-sample
+adjustments for tests of moderators and model fit using robust variance
+estimation in meta-regression. Journal of Educational and Behavioral
+Statistics. 2015;40(6):604–34. </div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

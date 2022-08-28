@@ -88,6 +88,8 @@ Anti-log the estimate and confidence intervals to get odds ratios
                            UCI=round( exp( m1$reg_table$CI.U ), digits = 2 ) 
                            ) 
   )
+
+#save(model1.eff, file='model1.eff.RData')
 ```
 
 Marginal weighted mean effect estimates ($OR_+$) compatible with our data range from 0.58 (lower bound 95% CI) to 0.90 (upper bound 95% CI) with a point estimate of $OR_+=0.72$. Having an RSV LRTI relative to non-RSV LRTI is associated with a 10-42% reduction in odds for subsequent wheezing illness. An increase in the odds of subsequent wheezing illness with RSV LRTI vs. non-RSV LRTI is not compatible with our data with $\alpha=.05$. 
@@ -115,18 +117,22 @@ m2 <- robu( log( es ) ~ exp.012 + mingen + relevel( hosp, ref = 'Emergency/Hospi
             modelweights = 'CORR',
             small = T
             )
+options( digits = 2 )
 print( m2 )
 
 ```
 
 
 ```{r}
-( model2.eff <- data.frame( OddsRatioEstimate=round( exp( m2$reg_table$b.r ), digits = 2 ), 
+( model2.eff <- data.frame( Predictor=c('Intercept','Exposure Ascertainment Period','Genetic Adjustment','Emergency Care or Hospitalization Required'),
+                           df= m2$reg_table$dfs, 
+                           OR=round( exp( m2$reg_table$b.r ), digits = 2 ), 
                            LCI=round( exp( m2$reg_table$CI.L ), digits = 2 ),
-                           UCI=round( exp( m2$reg_table$CI.U ), digits = 2 ),
-                           Predictor=c('Intercept','Exposure Period','Genetic Adjustment','Emergency/Hospitalization')
-                           ) 
+                           UCI=round( exp( m2$reg_table$CI.U ), digits = 2 )
+                           )
   )
+
+save( model2.eff, file='model2.eff.RData')
 ```
 
 The adjusted weighted mean odds ratio, holding all covariates at their modal levels, was $OR_+=0.60$ with values from 0.45 to 0.81 compatible with our data. There is insufficient evidence that any of the covariates modify the effects of RSV LRTI vs non-RSV LRTI on subsequent wheezing illness. 
@@ -143,4 +149,27 @@ sensitivity( m2 )
 
 
 
+```{r}
+m2a <- robu( log( es ) ~ relevel( exp.012, ref = 'Limited to first year of life')  + mingen + relevel( hosp, ref = 'Emergency/Hospitalization Required'), 
+            studynum = record_id, 
+            var.eff.size = es.se^2,
+            data = dfsub,
+            modelweights = 'CORR',
+            small = T
+            )
+print( m2a )
+```
 
+
+
+```{r}
+( model2a.eff <- data.frame( OddsRatioEstimate=round( exp( m2a$reg_table$b.r ), digits = 2 ), 
+                           LCI=round( exp( m2a$reg_table$CI.L ), digits = 2 ),
+                           UCI=round( exp( m2a$reg_table$CI.U ), digits = 2 ),
+                           Predictor=c('Intercept','Exposure Period','Genetic Adjustment','Emergency/Hospitalization')
+                           ) 
+  )
+
+save( model2a.eff, file='model2a.eff.RData')
+
+```

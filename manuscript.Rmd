@@ -1,0 +1,89 @@
+---
+title: "Manuscript"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+    theme: cosmo
+    highlight: tango
+bibliography: references.bib
+csl: vancouver.csl
+date: "`r Sys.Date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+```
+
+# Introduction
+
+# Method
+
+## Statistical Analysis
+
+We used robust variance estimation (RVE) meta-analysis [@hedges2010robust] to obtain aggregate effect estimates ($OR_+$) and confidence intervals in the robumeta package (version 2.0; @robumeta) in R (version 4.2.0). The RVE approach allows for inclusion of all relevant estimates from each study while yielding confidence intervals for the weighted mean estimates that have appropriate coverage. Unlike in multilevel meta-analysis, the RVE approach does not require knowledge (or well-informed estimates) of the within-study correlations among effect estimates [@tanner2016handling]. These within-study correlations are estimated crudely using cross-products of estimate residuals. As recommended by developers of the RVE approach, we used small-sample-size adjustments and Satterhwaite degrees of freedom ($df$), with model estimates with $df<4$ considered unreliable [@tipton2015small]. As the dependence in effect estimates was mainly attributable to having multiple clustered within studies, we used the correlated effect weights [@tanner2016handling].   
+
+# Results
+
+The marginal weighted mean effect estimate ($OR_+$) based on the unadjusted analysis showed that the data were compatible with reductions in odds of subsequent wheezing illness with RSV LRTI relative to non-RSV LRTI ranging from 10-42% with the point estimate indicative of a 28% reduction ($OR_+$=0.72, 95% CI: 0.58, 0.90 ).
+
+As shown in Table X, there  was insufficient evidence (with $\alpha$ = .05) of effect modification by any of the *a priori* effect modifiers. However, there was considerable uncertainty in the estimates. There was a trend ($\hat{\gamma}$ (*df*=35.21) = 0.34. 95% CI [-0.13, 0.80]) toward smaller effect estimates (nearer the null) among studies that limited exposure ascertainment to the first year of life ($aOR_+$ = 0.84, 95% CI: [0.55, 1.30]) compared to those that did not ($aOR_+$ = 0.60, 95% CI: [0.45, 0.81]) (see Figure X).  
+
+```{r}
+load( 'model1.eff.RData' )
+load( 'model2.eff.RData' )
+load( 'model2a.eff.RData' )
+
+knitr::kable( model2.eff, 
+              col.names = c('Predictor','df','Estimate','Lower Bound 95% CI','Upper Bound 95% CI' ), 
+              caption = 'Table X. Robust Variance Estimation Adjusted Model (Estimates are Weighted Mean Odd Ratios)',
+              digits = 2)
+```
+
+
+```{r}
+require( ggplot2 )
+require( Hmisc )
+
+forest <- data.frame( type=c('Marginal','Exposure Ascertainment Beyond First Year','Limited Exposure Ascertainment to First Year' ),
+                      est=c( model1.eff$OddsRatioEstimate[1], model2.eff$OR[1], model2a.eff$OddsRatioEstimate[1] ),
+                      lci=c( model1.eff$LCI[1], model2.eff$LCI[1], model2a.eff$LCI[1] ),
+                      uci=c( model1.eff$UCI[1], model2.eff$UCI[1], model2a.eff$UCI[1] ) )
+label( forest$type ) <- 'Estimate type'
+label( forest$est ) <- 'Weighted Mean Effect Estimate'
+label( forest$lci ) <- 'Lower 95% CI'
+label( forest$uci ) <- 'Upper 95% CI'
+forest$adj <- factor( c(0,0,1) )
+
+
+x <- with( forest, c( lci[1], est[1], uci[1], est[1], lci[2], est[2], uci[2], est[2],  lci[3], est[3], uci[3], est[3] ) )
+y = c(1,.5,1,1.5, 3, 2.5,3,3.5, 5,4.5,5,5.5 )
+f <- factor( rep( 1:3, each = 4 ), levels =1:3, labels = c('Unadjusted Estimate','Exposure Ascertainment Beyond First Year of Life','Limited Exposure Ascertainment to First Year of Life') )
+a <- factor( rep( 1:2, c( 4, 8 ) ), levels = 1:2, labels = c('Marginal','Adjusted') )
+
+plot <- data.frame( x, y, f, a )
+
+
+meanplot <- ggplot( plot, aes( x, y, group = f, fill = a ) ) +
+  geom_polygon( color = 1) +
+  labs( title = 'Weighted Mean Odds Ratio Estimates',
+        x = 'Weighted Mean Odds Ratio',
+        subtitle = 'Based on Robust Variance Estimation Meta-Analysis',
+        fill = 'Estimate Type',
+        caption = 'Vertical red line indicates null effect\nEstimates < 1 indicate stronger effects of non-RSV LRTI relative RSV LRTI on subsequent wheeze\nEstimates > 1 indicate stronger effects of RSV LRTI relative non-RSV LRTI on subsequent wheeze') +
+  theme( plot.title = element_text( color = 'darkblue', size = 16, face = 'bold', hjust = .5 ),
+         plot.subtitle = element_text(  size = 14, face = 'bold', hjust = .5 ),
+         axis.title.x = element_text( size = 12, face = 'bold' ),
+         legend.title = element_text( size = 12, face = 'bold' ),
+         #axis.text.y = element_blank(),
+         axis.title.y = element_blank(),
+         axis.text.y = element_text( size = 10)) +
+  geom_vline( xintercept = 1, color = 2 ) +
+  scale_fill_manual( values = c('firebrick','white','white') ) +
+  scale_y_continuous( n.breaks = 3, breaks = c(1,3,5), labels=c('Marginal Estimate','Exposure Ascertainment\n Beyond First Year of Life','Limited Exposure Ascertainment\n to First Year of Life') ) 
+meanplot
+
+
+```
+

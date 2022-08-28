@@ -8,4 +8,6 @@ navbar:
       href: analyses.html
     - text: "Data Prep"
       href: dataprep.html
+    - text: "Manuscript"
+      href: manuscript.html
 output_dir: docs
