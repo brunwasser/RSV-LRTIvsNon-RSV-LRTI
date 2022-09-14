@@ -1,15 +1,18 @@
 ---
 title: "Manuscript"
 output:
+  word_document:
+    toc: yes
+    toc_depth: '2'
   html_document:
     toc: yes
     toc_depth: 2
     toc_float: yes
     theme: cosmo
     highlight: tango
-bibliography: references.bib
-csl: vancouver.csl
 date: "`r Sys.Date()`"
+csl: vancouver.csl
+bibliography: references.bib
 ---
 
 ```{r setup, include=FALSE}

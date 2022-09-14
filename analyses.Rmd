@@ -51,7 +51,16 @@ label( dfsub1$es.se ) <- 'Standard error of log effect estimate'
 html( describe( dfsub1 ) )
 ```
 
-<br<
+
+```{r}
+require( table1 ) 
+
+
+table1( ~exp.012 + mingen + hosp, data = dfsub1, rowlabelhead = 'Effect Estimate Characteristics' )
+```
+
+
+<br>
 
 Plot the effect estimates on the log scale
 ```{r}
