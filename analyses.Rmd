@@ -56,7 +56,7 @@ html( describe( dfsub1 ) )
 require( table1 ) 
 
 
-table1( ~exp.012 + mingen + hosp, data = dfsub1, rowlabelhead = 'Effect Estimate Characteristics' )
+table1( ~exp.012 + mingen + hosp, data = dfsub1[ !is.na( dfsub$es), ], rowlabelhead = 'Effect Estimate Characteristics' )
 ```
 
 
